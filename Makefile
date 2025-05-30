@@ -93,9 +93,17 @@ down:
 build: down
 	@echo "Building containers..."
 	@docker compose build
-install: 
-	@echo -e "Installing dependencies for ${GREEN}v${version}${NC}"
+install:
+	@echo "Checking Node.js version..."
+	@node_version=$$(node -v); \
+	if [ "$$node_version" != "v22.16.0" ]; then \
+	  echo "Error: Expected Node.js version v22.16.0, but found $$node_version"; \
+	  nvm install v22.16.0; \
+	  echo "Node.js version set to v22.16.0"; \
+	fi
+	@echo -e "Using Node.js $$node_version"
 	@npm install -g pnpm
+	@pnpm install
 	@node -v
 
 start: 
