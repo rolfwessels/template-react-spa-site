@@ -1,13 +1,12 @@
-import React from "react";
-import Dashboard from "./pages/Dashboard";
-import { Theme } from "@radix-ui/themes";
 
-const App: React.FC = () => {
+import Dashboard from './pages/Dashboard'
+
+function App() {
   return (
-    <Theme accentColor="iris" grayColor="olive" radius="small">
+    <div className="min-h-screen">
       <Dashboard />
-    </Theme>
-  );
-};
+    </div>
+  )
+}
 
-export default App;
+export default App 
