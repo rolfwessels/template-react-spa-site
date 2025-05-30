@@ -93,10 +93,13 @@ down:
 build: down
 	@echo "Building containers..."
 	@docker compose build
-install: 
+
+install:
 	@echo -e "Installing dependencies for ${GREEN}v${version}${NC}"
 	@npm install -g pnpm
 	@node -v
+	@pnpm install
+	
 
 start: 
 	@echo -e "Starting the $(release) release of $(project)"
@@ -109,7 +112,6 @@ test:
 publish: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"
 	@pnpm build
-
 
 docker-login: 
 	@echo -e "Login to docker $(registry)"
