@@ -1,6 +1,24 @@
 import { useQuery } from 'urql'
 import { useParams, useNavigate } from '@tanstack/react-router'
 
+type Episode = {
+  id: string
+  name: string
+  episode: string
+}
+
+type Character = {
+  id: string
+  name: string
+  image: string
+  status: 'Alive' | 'Dead' | 'unknown'
+  species: string
+  gender?: string
+  origin?: { name: string }
+  location?: { name: string }
+  episode: Episode[]
+}
+
 const CHARACTER_QUERY = `
   query ($id: ID!) {
     character(id: $id) {
@@ -34,7 +52,7 @@ const CharacterDetail = () => {
     query: CHARACTER_QUERY,
     variables: { id },
   })
-  const char = data?.character
+  const char = data?.character as Character
 
   if (fetching) return <div className="text-center py-8">Loading...</div>
   if (error || !char) return <div className="text-center text-red-500 py-8">Character not found.</div>
@@ -47,7 +65,11 @@ const CharacterDetail = () => {
         <div className="flex-1">
           <h1 className="text-3xl font-bold mb-2">{char.name}</h1>
           <div className="flex items-center gap-2 mb-2">
-            <span className={`inline-block w-3 h-3 rounded-full ${statusColor[char.status] || statusColor.unknown}`} />
+            <span
+              className={`inline-block w-3 h-3 rounded-full ${
+                statusColor[char.status as 'Alive' | 'Dead' | 'unknown'] || statusColor.unknown
+              }`}
+            />
             <span className="text-lg font-medium">{char.status}</span>
           </div>
           <div className="mb-1"><span className="font-semibold">Species:</span> {char.species}</div>
@@ -59,7 +81,7 @@ const CharacterDetail = () => {
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Episodes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {char.episode.map((ep: any) => (
+          {char.episode.map((ep: Episode) => (
             <div key={ep.id} className="bg-gray-100 rounded p-3">
               <div className="font-semibold">{ep.name}</div>
               <div className="text-xs text-gray-500">{ep.episode}</div>

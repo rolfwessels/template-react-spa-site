@@ -4,6 +4,14 @@ import CharacterCard from '@components/CharacterCard'
 import { Provider } from 'urql'
 import { urqlClient } from '@lib/urqlClient'
 
+type Character = {
+  id: string
+  name: string
+  image: string
+  status: 'Alive' | 'Dead' | 'unknown'
+  species: string
+}
+
 const CHARACTERS_QUERY = `
   query ($page: Int, $name: String) {
     characters(page: $page, filter: { name: $name }) {
@@ -27,7 +35,7 @@ const CharacterExplorer = () => {
     variables: { page, name: search || undefined },
   })
 
-  const characters = data?.characters?.results || []
+  const characters = data?.characters?.results as Character[] || []
   const info = data?.characters?.info
 
   return (
@@ -46,7 +54,7 @@ const CharacterExplorer = () => {
       {fetching && <div className="text-center">Loading...</div>}
       {error && <div className="text-center text-red-500">Error loading characters.</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {characters.map((char: any) => (
+        {characters.map((char: Character) => (
           <CharacterCard key={char.id} {...char} />
         ))}
       </div>

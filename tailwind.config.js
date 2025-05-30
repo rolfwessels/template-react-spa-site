@@ -10,6 +10,7 @@ export default {
         primary: {         
         }
       }
+      
     },
   },
   plugins: [],

@@ -105,9 +105,13 @@ start:
 	@echo -e "Starting the $(release) release of $(project)"
 	@pnpm start
 
-test: 
-	@echo -e "Testing ${GREEN}v${version}${NC}"
-	@pnpm test
+test:
+	@echo -e "🔍 Linting"
+	@pnpm lint
+	@echo -e "🔍 Type checking"
+	@pnpm tsc --noEmit
+	@echo -e "🔍 Testing"
+	@pnpm vitest
 
 publish: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"
