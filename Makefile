@@ -110,8 +110,10 @@ start:
 	@echo -e "Starting the $(release) release of $(project)"
 	@pnpm start
 
-test: 
+test:
 	@echo -e "Testing ${GREEN}v${version}${NC}"
+	@pnpm lint
+	@pnpm type-check
 	@pnpm test
 
 publish: 
