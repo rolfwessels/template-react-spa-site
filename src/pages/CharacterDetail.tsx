@@ -1,23 +1,11 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
-interface Episode {
-  id: string;
-  name: string;
-  episode: string;
-}
-
-interface CharacterDetailData {
-  id: string;
-  name: string;
-  status: string;
-  species: string;
-  gender: string;
-  origin: { name: string };
-  location: { name: string };
-  image: string;
-  episode: Episode[];
-}
+import { print } from 'graphql';
+import {
+  CharacterDetailDocument,
+  type CharacterDetailQuery,
+  type CharacterDetailQueryVariables,
+} from '../graphql/generated/CharacterDetail.generated';
 
 const statusColorMap: Record<string, string> = {
   Alive: 'bg-green-500',
@@ -27,7 +15,9 @@ const statusColorMap: Record<string, string> = {
 
 const CharacterDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [character, setCharacter] = useState<CharacterDetailData | null>(null);
+  const [character, setCharacter] = useState<
+    CharacterDetailQuery['character']
+  >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,41 +25,26 @@ const CharacterDetail = () => {
     if (!id) return;
     const fetchCharacter = async () => {
       setLoading(true);
-      const query = `
-        query ($id: ID!) {
-          character(id: $id) {
-            id
-            name
-            status
-            species
-            gender
-            origin { name }
-            location { name }
-            image
-            episode {
-              id
-              name
-              episode
-            }
-          }
-        }
-      `;
       try {
         const res = await fetch('https://rickandmortyapi.com/graphql', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, variables: { id } }),
-        })
-        const json = await res.json()
+          body: JSON.stringify({
+            query: print(CharacterDetailDocument),
+            variables: { id } as CharacterDetailQueryVariables,
+          }),
+        });
+        const json = await res.json();
+        const data = json.data as CharacterDetailQuery;
         if (json.errors) {
-          setError(json.errors[0].message || 'Error fetching character.')
+          setError(json.errors[0].message || 'Error fetching character.');
         } else {
-          setCharacter(json.data.character)
+          setCharacter(data.character);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error.')
+        setError(err instanceof Error ? err.message : 'Unknown error.');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
     fetchCharacter();
@@ -114,10 +89,10 @@ const CharacterDetail = () => {
               <span className="font-semibold">Gender:</span> {character.gender}
             </p>
             <p className="mb-1">
-              <span className="font-semibold">Origin:</span> {character.origin.name}
+              <span className="font-semibold">Origin:</span> {character.origin?.name}
             </p>
             <p className="mb-1">
-              <span className="font-semibold">Location:</span> {character.location.name}
+              <span className="font-semibold">Location:</span> {character.location?.name}
             </p>
           </div>
         </div>
@@ -126,12 +101,14 @@ const CharacterDetail = () => {
         <h2 className="text-2xl font-bold mb-4">Episodes</h2>
         {character.episode.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {character.episode.map((ep) => (
-              <div key={ep.id} className="bg-gray-100 rounded-lg p-4">
-                <h3 className="font-semibold">{ep.name}</h3>
-                <p className="text-gray-600 text-sm">{ep.episode}</p>
-              </div>
-            ))}
+            {character.episode.map((ep) =>
+              ep ? (
+                <div key={ep.id} className="bg-gray-100 rounded-lg p-4">
+                  <h3 className="font-semibold">{ep.name}</h3>
+                  <p className="text-gray-600 text-sm">{ep.episode}</p>
+                </div>
+              ) : null
+            )}
           </div>
         ) : (
           <p>No episodes available.</p>

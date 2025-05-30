@@ -42,6 +42,7 @@ make dev
 make install        # Install dependencies
 make start          # Start dev server
 make build          # Build production version
+make lint           # Run lint checks
 make test           # Run tests
 ```
 

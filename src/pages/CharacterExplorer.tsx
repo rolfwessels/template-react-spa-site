@@ -1,23 +1,19 @@
 import { useEffect, useState } from 'react';
+import { print } from 'graphql';
+import {
+  CharactersDocument,
+  type CharactersQuery,
+  type CharactersQueryVariables,
+} from '../graphql/generated/Characters.generated';
 import CharacterCard from '../components/CharacterCard';
 
-interface Character {
-  id: string;
-  name: string;
-  image: string;
-  status: string;
-  species: string;
-}
-
-interface PageInfo {
-  pages: number;
-  next: number | null;
-  prev: number | null;
-}
-
 const CharacterExplorer = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [info, setInfo] = useState<PageInfo>({ pages: 1, next: null, prev: null });
+  const [characters, setCharacters] = useState<
+    NonNullable<CharactersQuery['characters']>['results']
+  >([]);
+  const [info, setInfo] = useState<
+    NonNullable<CharactersQuery['characters']>['info']
+  >({ count: null, pages: 1, next: null, prev: null });
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
@@ -26,36 +22,20 @@ const CharacterExplorer = () => {
     const fetchCharacters = async () => {
       setLoading(true);
       try {
-        const query = `
-          query($page: Int!, $name: String!) {
-            characters(page: $page, filter: { name: $name }) {
-              info {
-                pages
-                prev
-                next
-              }
-              results {
-                id
-                name
-                image
-                status
-                species
-              }
-            }
-          }
-        `;
         const res = await fetch('https://rickandmortyapi.com/graphql', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            query,
-            variables: { page, name: searchTerm },
+            query: print(CharactersDocument),
+            variables: { page, name: searchTerm } as CharactersQueryVariables,
           }),
         });
         const json = await res.json();
-        const { info: pageInfo, results } = json.data.characters;
-        setInfo(pageInfo);
-        setCharacters(results);
+        const data = json.data as CharactersQuery;
+        const pageInfo = data.characters?.info;
+        const results = data.characters?.results;
+        if (pageInfo) setInfo(pageInfo);
+        setCharacters(results ?? []);
       } catch (error) {
         console.error(error);
       } finally {

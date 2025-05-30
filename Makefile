@@ -57,6 +57,7 @@ help:
 	@echo "  Service Targets (should only be run inside the docker container)"
 	@echo "   - install 			  : Install dependencies"
 	@echo "   - start                 : Run the $(project)"
+	@echo "   - lint                  : Run lint checks"
 	@echo "   - test                  : Test the $(project)"
 	@echo "   - publish               : Publish the $(project)"
 	@echo ""
@@ -110,6 +111,8 @@ start:
 	@echo -e "Starting the $(release) release of $(project)"
 	@pnpm start
 
+lint:
+	@pnpm lint
 test:
 	@echo -e "Testing ${GREEN}v${version}${NC}"
 	@pnpm lint
