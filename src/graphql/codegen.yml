@@ -1,0 +1,21 @@
+overwrite: true
+schema:
+  - "https://rickandmortyapi.com/graphql":
+      headers:
+        Accept: "application/json"
+config:
+  addUnderscoreToArgsType: true
+generates:
+  ./src/graphql/interfaces/api.interface.ts:
+    plugins:
+      - typescript
+  ./src/graphql/generated:
+    documents: "./**/*.graphql"
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: "./../interfaces/api.interface.ts"
+      extension: ".generated.ts"
+      folder: "../generated"
+    plugins:
+      - typescript-operations
+      - typed-document-node
