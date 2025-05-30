@@ -122,7 +122,7 @@ docker-login:
 
 docker-build:
 	@echo -e "Building branch ${RED}$(current-branch)${NC} to ${GREEN}$(docker-tags)${NC} with ${GREEN}$(version-full)${NC}"
-	@cd src && docker build -f template-react-spa-site-codex.Cmd/Dockerfile --build-arg VERSION=$(version) --build-arg VERSION_SUFFIX=$(version-suffix) ${docker-tags} .
+	@docker build -f src/Dockerfile --build-arg VERSION=$(version) --build-arg VERSION_SUFFIX=$(version-suffix) ${docker-tags} .
 
 docker-push:
 	@echo -e "Pushing to ${GREEN}$(docker-tags)${NC}"

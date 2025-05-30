@@ -1,0 +1,10 @@
+node_modules
+.gitignore
+.vscode
+dist
+test
+*.log
+Dockerfile
+docker-compose.yml
+README.md
+ai-setup.md 
