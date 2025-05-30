@@ -1,13 +1,7 @@
-import Navigation from '@components/ui/NavigationMenu'
-import Dashboard from '@pages/Dashboard'
+import CharacterExplorer from '@pages/CharacterExplorer'
 
 function App() {
-  return (
-    <div className="min-h-screen">
-      <Navigation />
-      <Dashboard />
-    </div>
-  )
+  return <CharacterExplorer />
 }
 
 export default App 
