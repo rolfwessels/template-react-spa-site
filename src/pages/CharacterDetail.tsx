@@ -1,43 +1,6 @@
-import { useQuery } from 'urql'
 import { useParams, useNavigate } from '@tanstack/react-router'
-
-type Episode = {
-  id: string
-  name: string
-  episode: string
-}
-
-type Character = {
-  id: string
-  name: string
-  image: string
-  status: 'Alive' | 'Dead' | 'unknown'
-  species: string
-  gender?: string
-  origin?: { name: string }
-  location?: { name: string }
-  episode: Episode[]
-}
-
-const CHARACTER_QUERY = `
-  query ($id: ID!) {
-    character(id: $id) {
-      id
-      name
-      status
-      species
-      gender
-      origin { name }
-      location { name }
-      image
-      episode {
-        id
-        name
-        episode
-      }
-    }
-  }
-`
+import { useQuery } from '@apollo/client'
+import { CharacterDetailDocument, CharacterDetailQuery } from '../graphql/generated/CharacterDetail.generated'
 
 const statusColor = {
   Alive: 'bg-green-500',
@@ -45,17 +8,55 @@ const statusColor = {
   unknown: 'bg-gray-400',
 }
 
+interface ValidCharacter {
+  id: string
+  name: string
+  status: string
+  species: string
+  gender: string
+  image: string
+  origin: { name: string } | null
+  location: { name: string } | null
+  episode: Array<{
+    id: string
+    name: string
+    episode: string
+  }>
+}
+
 const CharacterDetail = () => {
   const { id } = useParams({ strict: false })
   const navigate = useNavigate()
-  const [{ data, fetching, error }] = useQuery({
-    query: CHARACTER_QUERY,
+  const { data, loading, error } = useQuery(CharacterDetailDocument, {
     variables: { id },
   })
-  const char = data?.character as Character
 
-  if (fetching) return <div className="text-center py-8">Loading...</div>
+  const char = data?.character
+  if (loading) return <div className="text-center py-8">Loading...</div>
   if (error || !char) return <div className="text-center text-red-500 py-8">Character not found.</div>
+
+  // Type guard to ensure all required fields are present
+  const isValidCharacter = (character: NonNullable<CharacterDetailQuery['character']>): character is ValidCharacter => {
+    return (
+      typeof character.id === 'string' &&
+      typeof character.name === 'string' &&
+      typeof character.status === 'string' &&
+      typeof character.species === 'string' &&
+      typeof character.gender === 'string' &&
+      typeof character.image === 'string' &&
+      Array.isArray(character.episode) &&
+      character.episode.every(ep => 
+        ep !== null &&
+        typeof ep.id === 'string' &&
+        typeof ep.name === 'string' &&
+        typeof ep.episode === 'string'
+      )
+    )
+  }
+
+  if (!isValidCharacter(char)) {
+    return <div className="text-center text-red-500 py-8">Invalid character data.</div>
+  }
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -81,7 +82,7 @@ const CharacterDetail = () => {
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Episodes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {char.episode.map((ep: Episode) => (
+          {char.episode.map((ep: { id: string; name: string; episode: string }) => (
             <div key={ep.id} className="bg-gray-100 rounded p-3">
               <div className="font-semibold">{ep.name}</div>
               <div className="text-xs text-gray-500">{ep.episode}</div>

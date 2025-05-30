@@ -4,15 +4,15 @@ import { RouterProvider, router } from './router'
 import './styles/index.css'
 import { Theme } from '@radix-ui/themes'
 import '@radix-ui/themes/styles.css'
-import { Provider } from 'urql'
-import { urqlClient } from './lib/urqlClient'
+import { ApolloProvider } from '@apollo/client'
+import { apolloClient } from './lib/apolloClient'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Theme accentColor="tomato" grayColor="olive" radius="small">
-      <Provider value={urqlClient}>
+      <ApolloProvider client={apolloClient}>
         <RouterProvider router={router} />
-      </Provider>
+      </ApolloProvider>
     </Theme>
   </React.StrictMode>,
 ) 
