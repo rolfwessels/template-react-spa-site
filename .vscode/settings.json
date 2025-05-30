@@ -1,0 +1,12 @@
+{
+  "files.exclude": {
+    "src/__tmp/**": true
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#7bca74",
+    "titleBar.inactiveBackground": "#b5dbb2",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveForeground": "#15202b99"
+  }
+  
+}
