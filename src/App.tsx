@@ -1,11 +1,17 @@
 
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
+import CharacterExplorer from './pages/CharacterExplorer'
 
 function App() {
   return (
-    <div className="min-h-screen">
-      <Dashboard />
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen">
+        <Routes>
+          <Route path="/" element={<CharacterExplorer />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 
