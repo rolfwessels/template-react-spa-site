@@ -17,9 +17,15 @@ A lightweight, modern React Single Page Application (SPA) template using Vite, T
 
 ### Prerequisites
 
-- Node.js ≥ 18.x
+- Node.js ≥ 22.x
 - pnpm
 - Docker (optional for devcontainers)
+
+```bash
+nvm install v22.16.0
+npm install -g pnpm
+node -v
+```
 
 ### Clone and Setup
 
@@ -34,11 +40,9 @@ make dev
 
 ```bash
 make install        # Install dependencies
-make dev            # Start dev server
+make start          # Start dev server
 make build          # Build production version
-make lint           # Run linter
 make test           # Run tests
-make docker-build   # Build Docker image
 ```
 
 ## 📁 Folder Structure
