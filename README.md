@@ -7,7 +7,7 @@ A lightweight, modern React Single Page Application (SPA) template using Vite, T
 - ⚛️ React + Vite (super-fast dev experience)
 - 🎨 TailwindCSS for utility-first styling
 - 🎛️ Radix UI primitives for accessible components
-- 🔌 Optional GraphQL support with urql
+- 🔌 Optional GraphQL support with apollo and graphql-codegen
 - 🧪 Vitest + Testing Library for testing
 - 🛠️ Makefile automation for local/dev tasks
 - 🐳 Docker + DevContainer ready
@@ -77,7 +77,6 @@ make test
 
 ## 🔗 Optional Integrations
 
-- GraphQL via urql: install when needed
 - State management with Zustand (if needed)
 - GitHub Actions CI template available
 

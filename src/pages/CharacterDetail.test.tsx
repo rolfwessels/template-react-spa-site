@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import CharacterDetail from './CharacterDetail'
-import { Provider, createClient } from 'urql'
 import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
+import { graphqlApi } from '../graphql/api'
 import '@testing-library/jest-dom'
 
 const mockCharacter = {
@@ -22,19 +22,14 @@ const mockCharacter = {
 
 const mockNavigate = vi.fn()
 
-// Create a mock urql client
-const mockClient = createClient({
-  url: 'https://rickandmortyapi.com/graphql',
-  requestPolicy: 'cache-and-network',
-  exchanges: [],
-})
-
-// Mock the executeQuery method
-mockClient.executeQuery = vi.fn().mockResolvedValue({
-  data: { character: mockCharacter },
-  fetching: false,
-  error: undefined,
-})
+// Mock the GraphQL API
+vi.mock('../graphql/api', () => ({
+  graphqlApi: {
+    getCharacterDetail: vi.fn().mockResolvedValue({
+      character: mockCharacter,
+    }),
+  },
+}))
 
 // Mock router hooks
 vi.mock('@tanstack/react-router', async () => {
@@ -47,7 +42,7 @@ vi.mock('@tanstack/react-router', async () => {
 })
 
 describe('CharacterDetail', () => {
-  it('renders character details and episodes', () => {
+  it('renders character details and episodes', async () => {
     const rootRoute = createRootRoute({
       component: () => <CharacterDetail />,
     })
@@ -70,12 +65,14 @@ describe('CharacterDetail', () => {
     router.navigate({ to: '/character/1' })
 
     render(
-      <Provider value={mockClient}>
-        <RouterProvider router={router} />
-      </Provider>
+      <RouterProvider router={router} />
     )
 
-    expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
+    // Wait for the character data to load
+    await waitFor(() => {
+      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
+    })
+
     expect(screen.getByText('Alive')).toBeInTheDocument()
     expect(screen.getByText('Human')).toBeInTheDocument()
     expect(screen.getByText('Male')).toBeInTheDocument()

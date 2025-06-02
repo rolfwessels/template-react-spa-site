@@ -10,7 +10,7 @@ You are helping scaffold and evolve a lightweight React SPA starter. Here's the 
 - **Radix UI** (accessible UI primitives)
 - **TanStack Router** (routing)
 - **Vitest** (tests)
-- **urql** (optional GraphQL client)
+- **graphql-codegen** (For generating graphql type safe classes)
 - **Zustand** (optional state management)
 
 ## 🛠️ Automation & Tooling

@@ -1,12 +1,7 @@
-import { useParams, useNavigate } from '@tanstack/react-router'
-import { useQuery } from '@apollo/client'
-import { CharacterDetailDocument, CharacterDetailQuery } from '../graphql/generated/CharacterDetail.generated'
-
-const statusColor = {
-  Alive: 'bg-green-500',
-  Dead: 'bg-red-500',
-  unknown: 'bg-gray-400',
-}
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from '@tanstack/react-router'
+import { graphqlApi } from '../graphql/api'
+import type { CharacterDetailQuery } from '../graphql/generated/CharacterDetail.generated'
 
 interface ValidCharacter {
   id: string
@@ -24,16 +19,36 @@ interface ValidCharacter {
   }>
 }
 
-const CharacterDetail = () => {
-  const { id } = useParams({ strict: false })
+export default function CharacterDetail() {
   const navigate = useNavigate()
-  const { data, loading, error } = useQuery(CharacterDetailDocument, {
-    variables: { id },
-  })
+  const { id } = useParams({ from: '/character/$id' })
+  const [character, setCharacter] = useState<CharacterDetailQuery['character']>()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string>()
 
-  const char = data?.character
-  if (loading) return <div className="text-center py-8">Loading...</div>
-  if (error || !char) return <div className="text-center text-red-500 py-8">Character not found.</div>
+  useEffect(() => {
+    const fetchCharacter = async () => {
+      try {
+        setLoading(true)
+        const data = await graphqlApi.getCharacterDetail(id)
+        setCharacter(data.character)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCharacter()
+  }, [id])
+
+  if (loading) {
+    return <div className="text-center py-8">Loading...</div>
+  }
+
+  if (error || !character) {
+    return <div className="text-center py-8 text-red-500">{error || 'Character not found'}</div>
+  }
 
   // Type guard to ensure all required fields are present
   const isValidCharacter = (character: NonNullable<CharacterDetailQuery['character']>): character is ValidCharacter => {
@@ -45,7 +60,7 @@ const CharacterDetail = () => {
       typeof character.gender === 'string' &&
       typeof character.image === 'string' &&
       Array.isArray(character.episode) &&
-      character.episode.every(ep => 
+      character.episode.every((ep): ep is NonNullable<typeof ep> => 
         ep !== null &&
         typeof ep.id === 'string' &&
         typeof ep.name === 'string' &&
@@ -54,44 +69,66 @@ const CharacterDetail = () => {
     )
   }
 
-  if (!isValidCharacter(char)) {
+  if (!isValidCharacter(character)) {
     return <div className="text-center text-red-500 py-8">Invalid character data.</div>
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <button onClick={() => navigate({ to: '/' })} className="mb-6 text-blue-600 hover:underline">&larr; Back to list</button>
-      <div className="flex flex-col md:flex-row gap-8 items-center md:items-start bg-white rounded-lg shadow p-6">
-        <img src={char.image} alt={char.name} className="w-48 h-48 rounded-lg object-cover" />
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-2">{char.name}</h1>
-          <div className="flex items-center gap-2 mb-2">
-            <span
-              className={`inline-block w-3 h-3 rounded-full ${
-                statusColor[char.status as 'Alive' | 'Dead' | 'unknown'] || statusColor.unknown
-              }`}
+    <div className="container mx-auto px-4 py-8">
+      <button
+        onClick={() => navigate({ to: '/' })}
+        className="mb-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+      >
+        Back to List
+      </button>
+
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="md:flex">
+          <div className="md:flex-shrink-0">
+            <img
+              className="h-48 w-full object-cover md:w-48"
+              src={character.image}
+              alt={character.name}
             />
-            <span className="text-lg font-medium">{char.status}</span>
           </div>
-          <div className="mb-1"><span className="font-semibold">Species:</span> {char.species}</div>
-          <div className="mb-1"><span className="font-semibold">Gender:</span> {char.gender}</div>
-          <div className="mb-1"><span className="font-semibold">Origin:</span> {char.origin?.name}</div>
-          <div className="mb-1"><span className="font-semibold">Location:</span> {char.location?.name}</div>
-        </div>
-      </div>
-      <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Episodes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {char.episode.map((ep: { id: string; name: string; episode: string }) => (
-            <div key={ep.id} className="bg-gray-100 rounded p-3">
-              <div className="font-semibold">{ep.name}</div>
-              <div className="text-xs text-gray-500">{ep.episode}</div>
+          <div className="p-8">
+            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+              {character.species}
             </div>
-          ))}
+            <h1 className="mt-2 text-2xl font-bold">{character.name}</h1>
+            <div className="mt-4 flex items-center">
+              <div
+                className={`h-3 w-3 rounded-full mr-2 ${
+                  character.status === 'Alive'
+                    ? 'bg-green-500'
+                    : character.status === 'Dead'
+                    ? 'bg-red-500'
+                    : 'bg-gray-500'
+                }`}
+              />
+              <span className="text-gray-600">{character.status}</span>
+            </div>
+            <p className="mt-2 text-gray-600">Gender: {character.gender}</p>
+            <p className="mt-2 text-gray-600">Origin: {character.origin?.name}</p>
+            <p className="mt-2 text-gray-600">Location: {character.location?.name}</p>
+          </div>
+        </div>
+
+        <div className="px-8 py-4 bg-gray-50">
+          <h2 className="text-xl font-semibold mb-4">Episodes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {character.episode?.map((episode) => (
+              <div
+                key={episode.id}
+                className="bg-white p-4 rounded shadow hover:shadow-md transition-shadow"
+              >
+                <h3 className="font-semibold">{episode.name}</h3>
+                <p className="text-gray-600">{episode.episode}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   )
-}
-
-export default CharacterDetail 
+} 

@@ -6,19 +6,27 @@ import { defineConfig } from "eslint/config";
 
 
 export default defineConfig([
-  { files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
+  {
+    ignores: ["src/graphql/generated/**/*", "src/graphql/interfaces/**/*"]
+  },
+  { 
+    files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
+    plugins: { js }, 
+    extends: ["js/recommended"] 
+  },
   { files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
     files: ["src/**/*.{js,jsx,ts,tsx}"],
     rules: {
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "@typescript-eslint/no-explicit-any": "off"
     },
     settings: {
       react: {
-        version: "detect",
-        defaultVersion: "18"
+        version: "18.2.0",
+        defaultVersion: "18.2.0"
       }
     }
   }
