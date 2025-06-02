@@ -28,7 +28,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
   ],
-  ignorePatterns: ['dist/', 'node_modules/', '*.config.js', 'vite.config.ts'],
+  ignorePatterns: ['dist/', 'node_modules/', '*.config.js', 'vite.config.ts', 'src/graphql/generated/**', 'src/graphql/interfaces/**'],
   rules: {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
