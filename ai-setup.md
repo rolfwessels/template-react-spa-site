@@ -6,12 +6,11 @@ You are helping scaffold and evolve a lightweight React SPA starter. Here's the 
 
 - **React** (18+)
 - **Vite** (dev/build tool)
-- **Tailwind CSS** (styling)
 - **Radix UI** (accessible UI primitives)
 - **TanStack Router** (routing)
 - **Vitest** (tests)
 - **graphql-codegen** (For generating graphql type safe classes)
-- **Zustand** (optional state management)
+- **Zustand** (optional state management)Na
 
 ## 🛠️ Automation & Tooling
 
@@ -21,21 +20,29 @@ You are helping scaffold and evolve a lightweight React SPA starter. Here's the 
 - `.devcontainer` for VS Code development in containers
 - ESLint + Prettier + EditorConfig for formatting/linting
 
-## 🤖 You Can Help With:
+## 📁 Folder Structure
 
-- Bootstrapping new components (`Dialog`, `DropdownMenu`, etc. with Radix + Tailwind)
-- Generating form schemas with `react-hook-form`
-- Writing tests with Vitest + Testing Library
-- Creating new pages or routes
-- Configuring urql client (only if GraphQL API is in use)
-- Improving DX (e.g. alias paths, error boundaries, suspense)
+```
+src/
+  components/     # Radix-wrapped reusable components
+  pages/          # App pages routed via TanStack Router
+  hooks/          # Custom hooks
+  lib/            # Utilities, clients, etc.
+  graphql/        # (Optional) GraphQL fragments/clients
+  styles/
+  App.tsx
+  main.tsx
+```
 
 ## ✅ Conventions
 
-- Tailwind class names are preferred for UI.
+- Radix-ui components should be used wherever possible. Especialy @radix-ui/themes
 - Reusable UI components should go in `components/ui/`.
 - Avoid large frameworks or abstractions.
 - Code should be modular, typed (TS), and composable.
+- We want a test for every component where possible
+- Only use `pnpm` to add components!
+- Do not use custom styles.
 
 ## 🔧 Example Tasks You Might Do
 

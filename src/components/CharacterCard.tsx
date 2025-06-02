@@ -15,7 +15,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, name, image, status,
   const navigate = useNavigate()
   return (
     <Card 
-      size="3" 
+      
       onClick={() => navigate({ to: `/character/${id}` })}
       style={{ cursor: 'pointer' }}
     >

@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { graphqlApi } from '../graphql/api'
 import type { CharacterDetailQuery } from '../graphql/generated/CharacterDetail.generated'
+import { CharacterInfo } from '../components/CharacterInfo'
+import { EpisodeList } from '../components/EpisodeList'
+import { Button, Container, Flex } from '@radix-ui/themes'
 
 interface ValidCharacter {
   id: string
@@ -74,61 +77,23 @@ export default function CharacterDetail() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <button
-        onClick={() => navigate({ to: '/' })}
-        className="mb-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-      >
-        Back to List
-      </button>
+    <Container p="6">
+      <Flex direction="column" gap="4">
+        <Button variant="soft" onClick={() => navigate({ to: '/' })}>
+          Back to List
+        </Button>
 
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="md:flex">
-          <div className="md:flex-shrink-0">
-            <img
-              className="h-48 w-full object-cover md:w-48"
-              src={character.image}
-              alt={character.name}
-            />
-          </div>
-          <div className="p-8">
-            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-              {character.species}
-            </div>
-            <h1 className="mt-2 text-2xl font-bold">{character.name}</h1>
-            <div className="mt-4 flex items-center">
-              <div
-                className={`h-3 w-3 rounded-full mr-2 ${
-                  character.status === 'Alive'
-                    ? 'bg-green-500'
-                    : character.status === 'Dead'
-                    ? 'bg-red-500'
-                    : 'bg-gray-500'
-                }`}
-              />
-              <span className="text-gray-600">{character.status}</span>
-            </div>
-            <p className="mt-2 text-gray-600">Gender: {character.gender}</p>
-            <p className="mt-2 text-gray-600">Origin: {character.origin?.name}</p>
-            <p className="mt-2 text-gray-600">Location: {character.location?.name}</p>
-          </div>
-        </div>
-
-        <div className="px-8 py-4 bg-gray-50">
-          <h2 className="text-xl font-semibold mb-4">Episodes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {character.episode?.map((episode) => (
-              <div
-                key={episode.id}
-                className="bg-white p-4 rounded shadow hover:shadow-md transition-shadow"
-              >
-                <h3 className="font-semibold">{episode.name}</h3>
-                <p className="text-gray-600">{episode.episode}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+        <CharacterInfo
+          name={character.name}
+          species={character.species}
+          status={character.status}
+          gender={character.gender}
+          origin={character.origin?.name}
+          location={character.location?.name}
+          image={character.image}
+        />
+        <EpisodeList episodes={character.episode} />
+      </Flex>
+    </Container>
   )
 } 

@@ -3,7 +3,8 @@ import CharacterCard from '@components/CharacterCard'
 import { CharactersQuery } from '../graphql/generated/Characters.generated'
 import { useQuery } from '@apollo/client'
 import { CharactersDocument } from '../graphql/generated/Characters.generated'
-import { Container, Flex, Grid, Heading, TextField, Text, Button } from '@radix-ui/themes'
+import { Container, Flex, Grid, Heading, TextField, Text, Button, Box } from '@radix-ui/themes'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
 type Character = NonNullable<NonNullable<CharactersQuery['characters']>['results']>[number]
 
@@ -22,37 +23,40 @@ const CharacterExplorer = () => {
     variables: { page, name: search || undefined },
   })
 
-  const characters = data?.characters?.results?.filter((char: Character | null): char is ValidCharacter => 
-    char !== null && 
-    typeof char.id === 'string' && 
-    typeof char.name === 'string' && 
-    typeof char.image === 'string' && 
-    typeof char.status === 'string' && 
+  const characters = data?.characters?.results?.filter((char: Character | null): char is ValidCharacter =>
+    char !== null &&
+    typeof char.id === 'string' &&
+    typeof char.name === 'string' &&
+    typeof char.image === 'string' &&
+    typeof char.status === 'string' &&
     typeof char.species === 'string'
   ) || []
   const info = data?.characters?.info
 
   return (
-    <Container size={{ md: '1', lg: '4' }} >
+    <Container size="3" p="6"  >
       <Flex direction="column" gap="4" align="center">
         <Heading size="6">Rick and Morty Characters</Heading>
-        <TextField.Root style={{ width: '100%', maxWidth: '32rem' }}>
+        <Box width="100%">
+
+        <TextField.Root 
+          placeholder="Search characters..."
+          value={search}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value); setPage(1); }}
+        >
           <TextField.Slot>
-            <input
-              placeholder="Search characters..."
-              value={search}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value); setPage(1); }}
-            />
+            <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>
         </TextField.Root>
-        
+        </Box>
+
         {loading && <Text align="center">Loading...</Text>}
         {error && <Text align="center" color="red">Error loading characters.</Text>}
 
-        <Grid columns={{ sm: '1', md: '2', lg: '3', xl: '4' }} gap="4">
+        <Grid width="100%" columns={{ xs: '2', md: '2', lg: '3', xl: '4' }} gap="4">
           {characters.map((char: ValidCharacter) => (
-            <CharacterCard 
-              key={char.id} 
+            <CharacterCard
+              key={char.id}
               id={char.id}
               name={char.name}
               image={char.image}
@@ -64,15 +68,15 @@ const CharacterExplorer = () => {
 
         {/* Paging Controls */}
         <Flex gap="4" align="center" mt="4">
-          <Button 
-            variant="soft" 
+          <Button
+            variant="soft"
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={!info?.prev}
           >
             Previous
           </Button>
           <Text>Page {page} of {info?.pages || 1}</Text>
-          <Button 
+          <Button
             variant="soft"
             onClick={() => setPage(p => (info?.next ? p + 1 : p))}
             disabled={!info?.next}
