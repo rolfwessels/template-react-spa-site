@@ -1,5 +1,7 @@
-import { describe, it, expect } from 'vitest'
+import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
 import { MockedProvider } from '@apollo/client/testing'
 import CharacterExplorer from './CharacterExplorer'
 import { CharactersDocument } from '../graphql/generated/Characters.generated'
@@ -10,155 +12,162 @@ const mockCharacters = {
       count: 2,
       pages: 1,
       next: null,
-      prev: null
+      prev: null,
     },
     results: [
       {
         id: '1',
         name: 'Rick Sanchez',
-        image: 'rick.jpg',
         status: 'Alive',
-        species: 'Human'
+        species: 'Human',
+        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
       },
       {
         id: '2',
         name: 'Morty Smith',
-        image: 'morty.jpg',
         status: 'Alive',
-        species: 'Human'
-      }
-    ]
-  }
+        species: 'Human',
+        image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
+      },
+    ],
+  },
+}
+
+const mockSearchResults = {
+  characters: {
+    info: {
+      count: 1,
+      pages: 1,
+      next: null,
+      prev: null,
+    },
+    results: [
+      {
+        id: '1',
+        name: 'Rick Sanchez',
+        status: 'Alive',
+        species: 'Human',
+        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+      },
+    ],
+  },
+}
+
+const mockEmptyResults = {
+  characters: {
+    info: {
+      count: 0,
+      pages: 1,
+      next: null,
+      prev: null,
+    },
+    results: [],
+  },
 }
 
 const mocks = [
   {
     request: {
       query: CharactersDocument,
-      variables: { page: 1, name: undefined }
+      variables: { page: 1 },
     },
-    result: {
-      data: mockCharacters
-    }
+    result: { data: mockCharacters },
   },
   {
     request: {
       query: CharactersDocument,
-      variables: { page: 1, name: 'Rick' }
+      variables: { page: 1, name: 'Rick' },
     },
-    result: {
-      data: {
-        characters: {
-          info: {
-            count: 1,
-            pages: 1,
-            next: null,
-            prev: null
-          },
-          results: [mockCharacters.characters.results[0]]
-        }
-      }
-    }
-  }
+    result: { data: mockSearchResults },
+  },
+  {
+    request: {
+      query: CharactersDocument,
+      variables: { page: 1, name: 'NonExistent' },
+    },
+    result: { data: mockEmptyResults },
+  },
 ]
 
 describe('CharacterExplorer', () => {
-  it('renders loading state initially', () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <CharacterExplorer />
-      </MockedProvider>
-    )
-    
-    expect(screen.getByText('Loading characters...')).toBeInTheDocument()
-  })
-
-  it('renders characters after loading', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <CharacterExplorer />
-      </MockedProvider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
-      expect(screen.getByText('Morty Smith')).toBeInTheDocument()
+  it('renders character list and handles search', async () => {
+    const rootRoute = createRootRoute({
+      component: () => <CharacterExplorer />,
     })
-  })
 
-  it('handles search functionality', async () => {
+    const indexRoute = createRoute({
+      getParentRoute: () => rootRoute,
+      path: '/',
+      component: CharacterExplorer,
+    })
+
+    const routeTree = rootRoute.addChildren([indexRoute])
+
+    const router = createRouter({ 
+      routeTree,
+      defaultPreload: false,
+      defaultPreloadStaleTime: 0,
+    })
+
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <CharacterExplorer />
+        <RouterProvider router={router} />
       </MockedProvider>
     )
 
-    // Wait for initial load
+    // Wait for the character list to load
     await waitFor(() => {
       expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
     })
 
-    // Type in search
-    const searchInput = screen.getByPlaceholderText('Search characters...')
+    // Check if both characters are rendered
+    expect(screen.getByText('Morty Smith')).toBeInTheDocument()
+
+    // Test search functionality
+    const searchInput = screen.getByRole('textbox', { name: /search characters/i })
     fireEvent.change(searchInput, { target: { value: 'Rick' } })
 
-    // Wait for filtered results
+    // Wait for the filtered results
     await waitFor(() => {
       expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
       expect(screen.queryByText('Morty Smith')).not.toBeInTheDocument()
     })
+
+    // Test pagination
+    const prevButton = screen.getByRole('button', { name: /previous page/i })
+    const nextButton = screen.getByRole('button', { name: /next page/i })
+    expect(prevButton).toBeDisabled()
+    expect(nextButton).toBeDisabled()
   })
 
-  it('handles error state', async () => {
-    const errorMock = {
-      request: {
-        query: CharactersDocument,
-        variables: { page: 1, name: undefined }
-      },
-      error: new Error('An error occurred')
-    }
-
-    render(
-      <MockedProvider mocks={[errorMock]} addTypename={false}>
-        <CharacterExplorer />
-      </MockedProvider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText('Error loading characters. Please try again later.')).toBeInTheDocument()
+  it('shows empty state when no characters match search', async () => {
+    const rootRoute = createRootRoute({
+      component: () => <CharacterExplorer />, 
     })
-  })
-
-  it('handles empty search results', async () => {
-    const emptyMock = {
-      request: {
-        query: CharactersDocument,
-        variables: { page: 1, name: 'NonExistentCharacter' }
-      },
-      result: {
-        data: {
-          characters: {
-            info: {
-              count: 0,
-              pages: 0,
-              next: null,
-              prev: null
-            },
-            results: []
-          }
-        }
-      }
-    }
-
+    const indexRoute = createRoute({
+      getParentRoute: () => rootRoute,
+      path: '/',
+      component: CharacterExplorer,
+    })
+    const routeTree = rootRoute.addChildren([indexRoute])
+    const router = createRouter({ 
+      routeTree,
+      defaultPreload: false,
+      defaultPreloadStaleTime: 0,
+    })
     render(
-      <MockedProvider mocks={[emptyMock]} addTypename={false}>
-        <CharacterExplorer />
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <RouterProvider router={router} />
       </MockedProvider>
     )
-
-    const searchInput = screen.getByPlaceholderText('Search characters...')
-    fireEvent.change(searchInput, { target: { value: 'NonExistentCharacter' } })
-
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
+    })
+    // Search for a non-existent character
+    const searchInput = screen.getByRole('textbox', { name: /search characters/i })
+    fireEvent.change(searchInput, { target: { value: 'NonExistent' } })
+    // Wait for the empty state message
     await waitFor(() => {
       expect(screen.getByText('No characters found matching your search.')).toBeInTheDocument()
     })

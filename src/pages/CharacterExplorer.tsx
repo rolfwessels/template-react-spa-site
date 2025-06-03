@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from 'react'
-import CharacterCard from '@components/CharacterCard'
+import CharacterCard from '../components/CharacterCard'
 import { CharactersQuery } from '../graphql/generated/Characters.generated'
 import { useQuery } from '@apollo/client'
 import { CharactersDocument } from '../graphql/generated/Characters.generated'
@@ -42,6 +42,7 @@ const CharacterExplorer = () => {
             placeholder="Search characters..."
             value={search}
             onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value); setPage(1); }}
+            aria-label="Search characters"
           >
             <TextField.Slot>
               <MagnifyingGlassIcon height="16" width="16" />
@@ -91,6 +92,7 @@ const CharacterExplorer = () => {
                 variant="soft"
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={!info?.prev}
+                aria-label="Previous page"
               >
                 Previous
               </Button>
@@ -99,6 +101,7 @@ const CharacterExplorer = () => {
                 variant="soft"
                 onClick={() => setPage(p => (info?.next ? p + 1 : p))}
                 disabled={!info?.next}
+                aria-label="Next page"
               >
                 Next
               </Button>

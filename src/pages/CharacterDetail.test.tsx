@@ -71,8 +71,11 @@ describe('CharacterDetail', () => {
     })
 
     // Check status using the Badge component
-    expect(screen.getByRole('status', { name: 'Alive' })).toBeInTheDocument()
-    expect(screen.getByText('Human')).toBeInTheDocument()
+    const statusBadge = screen.getByRole('status')
+    expect(statusBadge).toHaveTextContent('Alive')
+    expect(statusBadge).toHaveAttribute('data-accent-color', 'green')
+    
+    expect(screen.getByText('HUMAN')).toBeInTheDocument()
     expect(screen.getByText('Gender: Male')).toBeInTheDocument()
     expect(screen.getByText('Origin: Earth')).toBeInTheDocument()
     expect(screen.getByText('Location: Earth')).toBeInTheDocument()
@@ -82,7 +85,7 @@ describe('CharacterDetail', () => {
     expect(screen.getByText('S01E02')).toBeInTheDocument()
     
     // Back button
-    const backButton = screen.getByRole('button', { name: /back to list/i })
+    const backButton = screen.getByRole('button', { name: /back to character list/i })
     expect(backButton).toBeInTheDocument()
     backButton.click()
     expect(mockNavigate).toHaveBeenCalledWith({ to: '/' })

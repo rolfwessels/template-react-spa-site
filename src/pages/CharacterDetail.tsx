@@ -80,7 +80,11 @@ export default function CharacterDetail() {
   return (
     <Container p="6">
       <Flex direction="column" gap="4">
-        <Button variant="soft" onClick={() => navigate({ to: '/' })}>
+        <Button 
+          variant="soft" 
+          onClick={() => navigate({ to: '/' })}
+          aria-label="Back to character list"
+        >
           Back to List
         </Button>
 
