@@ -9,7 +9,7 @@ import { apolloClient } from './lib/apolloClient'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Theme accentColor="tomato" grayColor="olive" radius="small">
+    <Theme  radius="small">
       <ApolloProvider client={apolloClient}>
         <RouterProvider router={router} />
       </ApolloProvider>

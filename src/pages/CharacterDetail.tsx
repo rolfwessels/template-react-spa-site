@@ -39,14 +39,16 @@ export default function CharacterDetail() {
 
   
   return (
-    <Container p="6">
+    <Container p="6" className="bg-gray-50 min-h-screen">
       <Flex direction="column" gap="4">
         <Button
-          variant="soft"
+          variant="solid"
+          color="indigo"
+          className="w-fit rounded-lg shadow mb-2"
           onClick={() => navigate({ to: '/' })}
           aria-label="Back to character list"
         >
-          Back to List
+          Back to Characters
         </Button>
  
         {loading && <Loading message="Loading character..." />}
