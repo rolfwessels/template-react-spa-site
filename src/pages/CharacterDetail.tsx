@@ -6,6 +6,8 @@ import { CharacterInfo } from '../components/CharacterInfo'
 import { EpisodeList } from '../components/EpisodeList'
 import { Button, Container, Flex } from '@radix-ui/themes'
 import { CharacterStatus } from '@/components/StatusDot'
+import Loading from '../components/Loading'
+import ErrorMessage from '../components/ErrorMessage'
 
 interface ValidCharacter {
   id: string
@@ -26,8 +28,9 @@ interface ValidCharacter {
 export default function CharacterDetail() {
   const navigate = useNavigate()
   const { id } = useParams({ from: '/character/$id' })
-  const [character, setCharacter] = useState<CharacterDetailQuery['character']>()
+  const [character, setCharacter] = useState<ValidCharacter>()
   const [loading, setLoading] = useState(true)
+  
   const [error, setError] = useState<string>()
 
   useEffect(() => {
@@ -35,7 +38,11 @@ export default function CharacterDetail() {
       try {
         setLoading(true)
         const data = await graphqlApi.getCharacterDetail(id)
-        setCharacter(data.character)
+        if (data.character && ValidateCharacter(data.character)) {
+          setCharacter(data.character)
+        } else {
+          setError('Invalid character data')
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred')
       } finally {
@@ -46,16 +53,9 @@ export default function CharacterDetail() {
     fetchCharacter()
   }, [id])
 
-  if (loading) {
-    return <div className="text-center py-8">Loading...</div>
-  }
-
-  if (error || !character) {
-    return <div className="text-center py-8 text-red-500">{error || 'Character not found'}</div>
-  }
 
   // Type guard to ensure all required fields are present
-  const isValidCharacter = (character: NonNullable<CharacterDetailQuery['character']>): character is ValidCharacter => {
+  const ValidateCharacter = (character: NonNullable<CharacterDetailQuery['character']>): character is ValidCharacter => {
     return (
       typeof character.id === 'string' &&
       typeof character.name === 'string' &&
@@ -64,7 +64,7 @@ export default function CharacterDetail() {
       typeof character.gender === 'string' &&
       typeof character.image === 'string' &&
       Array.isArray(character.episode) &&
-      character.episode.every((ep): ep is NonNullable<typeof ep> => 
+      character.episode.every((ep): ep is NonNullable<typeof ep> =>
         ep !== null &&
         typeof ep.id === 'string' &&
         typeof ep.name === 'string' &&
@@ -73,31 +73,32 @@ export default function CharacterDetail() {
     )
   }
 
-  if (!isValidCharacter(character)) {
-    return <div className="text-center text-red-500 py-8">Invalid character data.</div>
-  }
-
+  
   return (
     <Container p="6">
       <Flex direction="column" gap="4">
-        <Button 
-          variant="soft" 
+        <Button
+          variant="soft"
           onClick={() => navigate({ to: '/' })}
           aria-label="Back to character list"
         >
           Back to List
         </Button>
+ 
+        {loading && <Loading message="Loading character..." />}
+        {error && <ErrorMessage message={typeof error === 'string' ? error : 'Character not found'} />}
 
-        <CharacterInfo
-          name={character.name}
-          species={character.species}
-          status={character.status}
-          gender={character.gender}
-          origin={character.origin?.name}
-          location={character.location?.name}
-          image={character.image}
-        />
-        <EpisodeList episodes={character.episode} />
+        {!loading && !error && character && (
+          <><CharacterInfo
+            name={character.name}
+            species={character.species}
+            status={character.status}
+            gender={character.gender}
+            origin={character.origin?.name}
+            location={character.location?.name}
+            image={character.image}
+          />
+            <EpisodeList episodes={character.episode} /></>)}
       </Flex>
     </Container>
   )

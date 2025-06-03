@@ -4,7 +4,9 @@ import { CharactersQuery } from '../graphql/generated/Characters.generated'
 import { useQuery } from '@apollo/client'
 import { CharactersDocument } from '../graphql/generated/Characters.generated'
 import { Container, Flex, Grid, Heading, TextField, Text, Button, Box, Card } from '@radix-ui/themes'
-import { MagnifyingGlassIcon, CrossCircledIcon } from '@radix-ui/react-icons'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import Loading from '../components/Loading'
+import ErrorMessage from '../components/ErrorMessage'
 
 type Character = NonNullable<NonNullable<CharactersQuery['characters']>['results']>[number]
 
@@ -51,18 +53,11 @@ const CharacterExplorer = () => {
         </Box>
 
         {loading && (
-          <Card size="2" style={{ width: '100%', textAlign: 'center', padding: '2rem' }}>
-            <Text size="3">Loading characters...</Text>
-          </Card>
+          <Loading message="Loading characters..." />
         )}
 
         {error && (
-          <Card size="2" style={{ width: '100%', textAlign: 'center', padding: '2rem' }}>
-            <Flex direction="column" gap="2" align="center">
-              <CrossCircledIcon width="24" height="24" color="red" />
-              <Text size="3" color="red">Error loading characters. Please try again later.</Text>
-            </Flex>
-          </Card>
+          <ErrorMessage message="Error loading characters. Please try again later." />
         )}
 
         {!loading && !error && characters.length === 0 && (
