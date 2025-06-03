@@ -15,7 +15,7 @@ export interface StatusDotProps {
 
 export const StatusDot: FC<StatusDotProps> = ({ status }) => {
   const color = statusColor[status] || 'gray'
-  return <Badge color={color} size="1">{status}</Badge>
+  return <Badge color={color} size="1" role="status">{status}</Badge>
 }
 
 export default StatusDot 

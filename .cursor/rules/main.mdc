@@ -1,5 +1,5 @@
 ---
-description: 
+description: Contains the structure of the project and conventions to follow.
 globs: 
 alwaysApply: true
 ---
@@ -35,3 +35,10 @@ src/
 - Write tests for every component where possible
 - Use `pnpm` exclusively for package management
 - Avoid custom styles, use Tailwind instead
+
+## Development Workflow
+- Run `make test` after any UI component changes or test modifications
+- Ensure all tests pass before committing changes
+- Write tests alongside component development
+- Follow TDD practices when possible
+

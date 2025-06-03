@@ -111,7 +111,7 @@ test:
 	@echo -e "🔍 Type checking"
 	@pnpm tsc --noEmit
 	@echo -e "🔍 Testing"
-	@pnpm vitest
+	@pnpm vitest run
 
 publish: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"

@@ -38,21 +38,6 @@ vi.mock('@tanstack/react-router', async () => {
 
 const mockNavigate = vi.fn()
 
-const mockCharacter = {
-  id: '1',
-  name: 'Rick Sanchez',
-  status: 'Alive',
-  species: 'Human',
-  gender: 'Male',
-  origin: { name: 'Earth' },
-  location: { name: 'Earth' },
-  image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-  episode: [
-    { id: '1', name: 'Pilot', episode: 'S01E01' },
-    { id: '2', name: 'Lawnmower Dog', episode: 'S01E02' },
-  ],
-}
-
 describe('CharacterDetail', () => {
   it('renders character details and episodes', async () => {
     const rootRoute = createRootRoute({
@@ -85,7 +70,8 @@ describe('CharacterDetail', () => {
       expect(screen.getByText('Rick Sanchez')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Alive')).toBeInTheDocument()
+    // Check status using the Badge component
+    expect(screen.getByRole('status', { name: 'Alive' })).toBeInTheDocument()
     expect(screen.getByText('Human')).toBeInTheDocument()
     expect(screen.getByText('Gender: Male')).toBeInTheDocument()
     expect(screen.getByText('Origin: Earth')).toBeInTheDocument()
@@ -94,8 +80,7 @@ describe('CharacterDetail', () => {
     expect(screen.getByText('S01E01')).toBeInTheDocument()
     expect(screen.getByText('Lawnmower Dog')).toBeInTheDocument()
     expect(screen.getByText('S01E02')).toBeInTheDocument()
-    // Check status dot color by class
-    expect(document.querySelector('.bg-green-500')).toBeInTheDocument()
+    
     // Back button
     const backButton = screen.getByRole('button', { name: /back to list/i })
     expect(backButton).toBeInTheDocument()

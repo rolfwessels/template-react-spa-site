@@ -1,10 +1,10 @@
 import { Card, Flex, Avatar, Heading, Text } from '@radix-ui/themes'
-import { StatusDot } from './StatusDot'
+import { StatusDot, CharacterStatus } from './StatusDot'
 
 interface CharacterInfoProps {
   name: string
   species: string
-  status: string
+  status: CharacterStatus
   gender: string
   origin?: string | null
   location?: string | null

@@ -5,11 +5,12 @@ import type { CharacterDetailQuery } from '../graphql/generated/CharacterDetail.
 import { CharacterInfo } from '../components/CharacterInfo'
 import { EpisodeList } from '../components/EpisodeList'
 import { Button, Container, Flex } from '@radix-ui/themes'
+import { CharacterStatus } from '@/components/StatusDot'
 
 interface ValidCharacter {
   id: string
   name: string
-  status: string
+  status: CharacterStatus
   species: string
   gender: string
   image: string

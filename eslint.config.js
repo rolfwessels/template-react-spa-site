@@ -7,7 +7,12 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
-    ignores: ["src/graphql/generated/**/*", "src/graphql/interfaces/**/*"]
+    ignores: [
+      "src/graphql/generated/**/*",
+      "src/graphql/interfaces/**/*",
+      ".tmp/**/*",
+      "src/.tmp/**/*"
+    ]
   },
   { 
     files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
