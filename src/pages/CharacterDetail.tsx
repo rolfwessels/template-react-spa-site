@@ -9,26 +9,10 @@ import { CharacterStatus } from '@/components/StatusDot'
 import Loading from '../components/Loading'
 import ErrorMessage from '../components/ErrorMessage'
 
-interface ValidCharacter {
-  id: string
-  name: string
-  status: CharacterStatus
-  species: string
-  gender: string
-  image: string
-  origin: { name: string } | null
-  location: { name: string } | null
-  episode: Array<{
-    id: string
-    name: string
-    episode: string
-  }>
-}
-
 export default function CharacterDetail() {
   const navigate = useNavigate()
   const { id } = useParams({ from: '/character/$id' })
-  const [character, setCharacter] = useState<ValidCharacter>()
+  const [character, setCharacter] = useState<CharacterDetailQuery['character']>()
   const [loading, setLoading] = useState(true)
   
   const [error, setError] = useState<string>()
@@ -38,10 +22,10 @@ export default function CharacterDetail() {
       try {
         setLoading(true)
         const data = await graphqlApi.getCharacterDetail(id)
-        if (data.character && ValidateCharacter(data.character)) {
+        if (data.character) {
           setCharacter(data.character)
         } else {
-          setError('Invalid character data')
+          setError('Character not found')
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred')
@@ -52,26 +36,6 @@ export default function CharacterDetail() {
 
     fetchCharacter()
   }, [id])
-
-
-  // Type guard to ensure all required fields are present
-  const ValidateCharacter = (character: NonNullable<CharacterDetailQuery['character']>): character is ValidCharacter => {
-    return (
-      typeof character.id === 'string' &&
-      typeof character.name === 'string' &&
-      typeof character.status === 'string' &&
-      typeof character.species === 'string' &&
-      typeof character.gender === 'string' &&
-      typeof character.image === 'string' &&
-      Array.isArray(character.episode) &&
-      character.episode.every((ep): ep is NonNullable<typeof ep> =>
-        ep !== null &&
-        typeof ep.id === 'string' &&
-        typeof ep.name === 'string' &&
-        typeof ep.episode === 'string'
-      )
-    )
-  }
 
   
   return (
@@ -90,15 +54,29 @@ export default function CharacterDetail() {
 
         {!loading && !error && character && (
           <><CharacterInfo
-            name={character.name}
-            species={character.species}
-            status={character.status}
-            gender={character.gender}
-            origin={character.origin?.name}
-            location={character.location?.name}
-            image={character.image}
+            name={character.name ?? 'Unknown'}
+            species={character.species ?? 'Unknown'}
+            status={(character.status ?? 'unknown') as CharacterStatus}
+            gender={character.gender ?? 'Unknown'}
+            origin={character.origin?.name ?? 'Unknown'}
+            location={character.location?.name ?? 'Unknown'}
+            image={character.image ?? ''}
           />
-            <EpisodeList episodes={character.episode} /></>)}
+            <EpisodeList
+              episodes={
+                (character.episode ?? [])
+                  .filter(
+                    (ep): ep is { id: string; name: string; episode: string } =>
+                      !!ep && !!ep.id && !!ep.name && !!ep.episode
+                  )
+                  .map(ep => ({
+                    ...ep,
+                    id: ep.id!,
+                    name: ep.name!,
+                    episode: ep.episode!,
+                  }))
+              }
+            /></>)}
       </Flex>
     </Container>
   )
