@@ -16,17 +16,17 @@ const CharacterExplorer = () => {
   })
 
   const characters = (data?.characters?.results || []).filter(
-    (char): char is { id: string; name: string; status: string; species: string } =>
-      !!char && !!char.id && !!char.name && !!char.status && !!char.species
+    (char): char is { id: string; name: string; status: string; species: string; image: string } =>
+      !!char && !!char.id && !!char.name && !!char.status && !!char.species && !!char.image
   )
   const info = data?.characters?.info
 
   return (
-    <Container size="3" p="6" className="bg-gray-50 min-h-screen">
+    <Container size="3" className="min-h-screen bg-gray-50 p-6">
       <Flex direction="column" gap="2" align="center">
         <Heading size="6" className="mb-1">Rick and Morty Characters</Heading>
         <Text color="gray" size="3" className="mb-4">Browse and search your favorite characters from the show.</Text>
-        <Box width="100%" className="mb-4">
+        <Box className="w-full mb-4">
           <TextField.Root 
             placeholder="Search characters..."
             value={search}
@@ -48,16 +48,15 @@ const CharacterExplorer = () => {
         )}
 
         {!loading && !error && characters.length === 0 && (
-          <Card size="2" style={{ width: '100%', textAlign: 'center', padding: '2rem' }}>
+          <Card size="2" className="w-full text-center p-8">
             <Text size="3">No characters found matching your search.</Text>
           </Card>
         )}
 
         {!loading && !error && characters.length > 0 && (
           <>
-              <CharacterDashboard  characters={characters} />
-              
-
+            <CharacterDashboard characters={characters} />
+            
             <Grid width="100%" columns={{ xs: '1', sm: '2', md: '3', lg: '4' }} gap="6" className="py-4">
               {characters.map((char) =>
                 char && (
@@ -73,8 +72,7 @@ const CharacterExplorer = () => {
               )}
             </Grid>
 
-            {/* Paging Controls */}
-            <Flex gap="4" align="center" mt="4">
+            <Flex gap="4" align="center" className="mt-4">
               <Button
                 variant="solid"
                 color="indigo"

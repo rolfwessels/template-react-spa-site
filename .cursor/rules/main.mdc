@@ -35,6 +35,7 @@ src/
 - Write tests for every component where possible
 - Use `pnpm` exclusively for package management
 - Avoid custom styles, use Tailwind instead
+- When working with graphql use the generated calls and interfaces `src/graphql/generated` and `src/graphql/interfaces`. Do not reinvent types everytime.
 
 ## Development Workflow
 - Run `make test` after any UI component changes or test modifications

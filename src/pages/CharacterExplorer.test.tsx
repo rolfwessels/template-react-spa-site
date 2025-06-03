@@ -6,6 +6,12 @@ import { MockedProvider } from '@apollo/client/testing'
 import CharacterExplorer from './CharacterExplorer'
 import { CharactersDocument } from '../graphql/generated/Characters.generated'
 
+global.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}; 
+
 const mockCharacters = {
   characters: {
     info: {
