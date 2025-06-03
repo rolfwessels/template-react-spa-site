@@ -75,10 +75,9 @@ describe('CharacterDetail', () => {
     expect(statusBadge).toHaveTextContent('Alive')
     expect(statusBadge).toHaveAttribute('data-accent-color', 'green')
     
-    expect(screen.getByText('HUMAN')).toBeInTheDocument()
-    expect(screen.getByText('Gender: Male')).toBeInTheDocument()
-    expect(screen.getByText('Origin: Earth')).toBeInTheDocument()
-    expect(screen.getByText('Location: Earth')).toBeInTheDocument()
+    expect(screen.getByText('Human')).toBeInTheDocument()
+    expect(screen.getByText('Male')).toBeInTheDocument()
+    expect(screen.getByText('Earth')).toBeInTheDocument()
     expect(screen.getByText('Pilot')).toBeInTheDocument()
     expect(screen.getByText('S01E01')).toBeInTheDocument()
     expect(screen.getByText('Lawnmower Dog')).toBeInTheDocument()

@@ -6,6 +6,7 @@ import { Container, Flex, Grid, Heading, TextField, Text, Button, Box, Card } fr
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import Loading from '../components/Loading'
 import ErrorMessage from '../components/ErrorMessage'
+import CharacterDashboard from '../components/CharacterDashboard'
 
 const CharacterExplorer = () => {
   const [search, setSearch] = useState('')
@@ -14,7 +15,10 @@ const CharacterExplorer = () => {
     variables: { page, name: search || undefined },
   })
 
-  const characters = data?.characters?.results || []
+  const characters = (data?.characters?.results || []).filter(
+    (char): char is { id: string; name: string; status: string; species: string } =>
+      !!char && !!char.id && !!char.name && !!char.status && !!char.species
+  )
   const info = data?.characters?.info
 
   return (
@@ -35,7 +39,6 @@ const CharacterExplorer = () => {
             </TextField.Slot>
           </TextField.Root>
         </Box>
-
         {loading && (
           <Loading message="Loading characters..." />
         )}
@@ -52,6 +55,9 @@ const CharacterExplorer = () => {
 
         {!loading && !error && characters.length > 0 && (
           <>
+              <CharacterDashboard  characters={characters} />
+              
+
             <Grid width="100%" columns={{ xs: '1', sm: '2', md: '3', lg: '4' }} gap="6" className="py-4">
               {characters.map((char) =>
                 char && (

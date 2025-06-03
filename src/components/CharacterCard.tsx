@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { Card, Flex, Avatar, Heading, Text, Badge } from '@radix-ui/themes'
+import { Card, Flex, Avatar, Heading, Badge } from '@radix-ui/themes'
 import { StatusDot, CharacterStatus } from './StatusDot'
 
 export interface CharacterCardProps {

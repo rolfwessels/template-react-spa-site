@@ -1,5 +1,4 @@
 import { Card, Grid, Heading, Text, Flex } from '@radix-ui/themes'
-import { VideoIcon } from '@radix-ui/react-icons'
 
 interface Episode {
   id: string
