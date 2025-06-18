@@ -59,6 +59,7 @@ help:
 	@echo "   - start                 : Run the $(project)"
 	@echo "   - test                  : Test the $(project)"
 	@echo "   - build-release         : Build release version of the $(project)"
+	@echo "   - zip-build             : Zip the build"
 	@echo "   - codegen               : Generate the graphql types"
 	@echo ""
 	@echo "   - docker-login          : Login to docker registry"
@@ -121,7 +122,10 @@ test:
 build-release: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"
 	@pnpm build
-	
+
+zip-build:
+	@echo -e "Zipping the  ${GREEN}v${version}${NC}-$(release)"
+	@zip -r dist/release.v${version}.zip dist
 
 
 docker-login: 
