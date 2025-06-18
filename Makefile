@@ -60,6 +60,7 @@ help:
 	@echo "   - test                  : Test the $(project)"
 	@echo "   - build-release         : Build release version of the $(project)"
 	@echo "   - zip-build             : Zip the build"
+	@echo "   - version               : Print the current version number"
 	@echo "   - codegen               : Generate the graphql types"
 	@echo ""
 	@echo "   - docker-login          : Login to docker registry"
@@ -118,6 +119,9 @@ test:
 	@pnpm tsc --noEmit
 	@echo -e "🔍 Testing"
 	@pnpm vitest run
+
+version:
+	@echo $(version)
 
 build-release: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"
