@@ -59,6 +59,7 @@ help:
 	@echo "   - start                 : Run the $(project)"
 	@echo "   - test                  : Test the $(project)"
 	@echo "   - publish               : Publish the $(project)"
+	@echo "   - codegen               : Generate the graphql types"
 	@echo ""
 	@echo "   - docker-login          : Login to docker registry"
 	@echo "   - docker-build          : Build the docker image"
@@ -104,6 +105,10 @@ install:
 start: 
 	@echo -e "Starting the $(release) release of $(project)"
 	@pnpm start
+
+codegen:
+	@echo -e "Generating graphql types"
+	@pnpm codegen
 
 test:
 	@echo -e "🔍 Linting"

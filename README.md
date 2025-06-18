@@ -81,6 +81,12 @@ make test
 - State management with Zustand (if needed)
 - GitHub Actions CI template available
 
+## ? Things that we are working on
+
+- [ ] Better graphql integration (we want proper types)
+- [ ] We want to use local storage as cache (load from cache > check server > update cache)
+- [ ] I don't like all the .config files in the root. Can we do something better? 
+
 ## 📜 License
 
 MIT — use it however you like!
