@@ -4,12 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "start": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "test": "vitest",
+    "dev": "vite --config config/vite.config.ts",
+    "start": "vite --config config/vite.config.ts",
+    "build": "tsc && vite build --config config/vite.config.ts",
+    "lint": "eslint . --config config/eslint.config.js --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview --config config/vite.config.ts",
+    "test": "vitest --config config/vitest.config.ts",
     "codegen": "graphql-codegen --config src/graphql/codegen.ts",
     "codegen:watch": "graphql-codegen --config src/graphql/codegen.ts --watch"
   },
