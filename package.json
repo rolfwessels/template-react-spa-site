@@ -10,8 +10,8 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "codegen": "graphql-codegen --config src/graphql/codegen.yml",
-    "codegen:watch": "graphql-codegen --config src/graphql/codegen.yml --watch"
+    "codegen": "graphql-codegen --config src/graphql/codegen.ts",
+    "codegen:watch": "graphql-codegen --config src/graphql/codegen.ts --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.9.5",

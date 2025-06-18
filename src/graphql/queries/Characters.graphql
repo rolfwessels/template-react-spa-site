@@ -1,17 +1,48 @@
+
+fragment CharacterBasic on Character {
+  id
+  name
+  image
+  status
+  species
+}
+
+fragment CharacterInfo on Character {
+  id
+  name
+  image
+  status
+  species
+  gender
+  origin {
+    name
+  }
+  location {
+    name
+  }
+}
+
 query Characters($page: Int, $name: String) {
-    characters(page: $page, filter: { name: $name }) {
-      info {
-        count
-        pages
-        next
-        prev
-      }
-      results {
-        id
-        name
-        image
-        status
-        species
-      }
+  characters(page: $page, filter: { name: $name }) {
+    info {
+      count
+      pages
+      next
+      prev
+    }
+    results {
+      ...CharacterBasic
     }
   }
+}
+
+query CharacterDetail($id: ID!) {
+  character(id: $id) {
+    ...CharacterInfo
+    episode {
+      id
+      name
+      episode
+    }
+  }
+}
