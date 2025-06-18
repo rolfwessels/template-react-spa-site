@@ -16,6 +16,7 @@ alwaysApply: true
 
 ## Folder Structure
 ```
+config/           # Contains the boilder plate config files
 src/
   components/     # Radix-wrapped reusable components
   pages/          # App pages routed via TanStack Router

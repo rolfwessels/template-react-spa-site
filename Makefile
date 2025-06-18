@@ -118,7 +118,7 @@ test:
 	@echo -e "🔍 Type checking"
 	@pnpm tsc --noEmit
 	@echo -e "🔍 Testing"
-	@pnpm vitest run
+	@pnpm vitest run --config config/vitest.config.ts
 
 version:
 	@echo $(version)

@@ -127,7 +127,7 @@ make test
 
 - [x] Better graphql integration (we want proper types)
 - [ ] We want to use local storage as cache (load from cache > check server > update cache)
-- [ ] I don't like all the .config files in the root. Can we do something better? 
+- [x] I don't like all the .config files in the root. Can we do something better? 
 
 ## 📜 License
 
