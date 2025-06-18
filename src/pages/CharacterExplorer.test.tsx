@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest'
 import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
 import { MockedProvider } from '@apollo/client/testing'
 import CharacterExplorer from './CharacterExplorer'
-import { CharactersDocument } from '../graphql/generated/Characters.generated'
+import { CharactersDocument, CharacterBasicFragment } from '../graphql/generated/Characters.generated'
 
 global.ResizeObserver = class {
   observe() {}
@@ -12,56 +12,58 @@ global.ResizeObserver = class {
   disconnect() {}
 }; 
 
+// Mock characters using fragment types with __typename for Apollo Client
+const mockRick: CharacterBasicFragment & { __typename: 'Character' } = {
+  __typename: 'Character',
+  id: '1',
+  name: 'Rick Sanchez',
+  status: 'Alive',
+  species: 'Human',
+  image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+}
+
+const mockMorty: CharacterBasicFragment & { __typename: 'Character' } = {
+  __typename: 'Character',
+  id: '2',
+  name: 'Morty Smith',
+  status: 'Alive',
+  species: 'Human',
+  image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
+}
+
 const mockCharacters = {
   characters: {
+    __typename: 'Characters' as const,
     info: {
+      __typename: 'Info' as const,
       count: 2,
       pages: 1,
       next: null,
       prev: null,
     },
-    results: [
-      {
-        id: '1',
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-      },
-      {
-        id: '2',
-        name: 'Morty Smith',
-        status: 'Alive',
-        species: 'Human',
-        image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
-      },
-    ],
+    results: [mockRick, mockMorty],
   },
 }
 
 const mockSearchResults = {
   characters: {
+    __typename: 'Characters' as const,
     info: {
+      __typename: 'Info' as const,
       count: 1,
       pages: 1,
       next: null,
       prev: null,
     },
-    results: [
-      {
-        id: '1',
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-      },
-    ],
+    results: [mockRick],
   },
 }
 
 const mockEmptyResults = {
   characters: {
+    __typename: 'Characters' as const,
     info: {
+      __typename: 'Info' as const,
       count: 0,
       pages: 1,
       next: null,
@@ -116,7 +118,7 @@ describe('CharacterExplorer', () => {
     })
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <RouterProvider router={router} />
       </MockedProvider>
     )
@@ -162,7 +164,7 @@ describe('CharacterExplorer', () => {
       defaultPreloadStaleTime: 0,
     })
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <RouterProvider router={router} />
       </MockedProvider>
     )

@@ -9,7 +9,6 @@ import {
 import { CharacterInfo } from '../components/CharacterInfo'
 import { EpisodeList } from '../components/EpisodeList'
 import { Button, Container, Flex } from '@radix-ui/themes'
-import { CharacterStatus } from '@/components/StatusDot'
 import Loading from '../components/Loading'
 import ErrorMessage from '../components/ErrorMessage'
 

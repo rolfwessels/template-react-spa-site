@@ -1,17 +1,14 @@
-import { FC } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Card, Flex, Avatar, Heading, Badge } from '@radix-ui/themes'
 import { StatusDot, CharacterStatus } from './StatusDot'
+import { CharacterBasicFragment } from '@/graphql/generated/Characters.generated'
 
 export interface CharacterCardProps {
-  id: string
-  name: string
-  image: string
-  status: CharacterStatus
-  species: string
+  character : CharacterBasicFragment
 }
 
-export const CharacterCard: FC<CharacterCardProps> = ({ id, name, image, status, species }) => {
+export const CharacterCard = (character: CharacterBasicFragment) => {
+  const { id, name, image, status, species } = character
   const navigate = useNavigate()
   return (
     <Card
@@ -22,10 +19,10 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, name, image, status,
     >
       <div className="flex justify-center w-full">
         <Avatar
-          src={image}
+          src={image ?? ''}
           size="7"
           radius="full"
-          fallback={name.slice(0, 2)}
+          fallback={name?.slice(0, 2) ?? ''}
           className="mb-3 border-4 border-white shadow-lg"
         />
       </div>
@@ -34,7 +31,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, name, image, status,
       <Flex direction="column" align="center" gap="1" className="mb-2">
         <Flex align="center" gap="2">
           <Badge color="indigo" variant="soft" className="text-sm">{species}</Badge>
-          <StatusDot status={status} />
+          <StatusDot status={status as CharacterStatus} />
           
         </Flex>
         

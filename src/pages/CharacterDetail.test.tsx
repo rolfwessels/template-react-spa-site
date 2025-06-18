@@ -2,29 +2,65 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import CharacterDetail from './CharacterDetail'
 import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
+import { MockedProvider } from '@apollo/client/testing'
+import { CharacterDetailDocument, CharacterInfoFragment, EpisodeInfoFragment } from '../graphql/generated/Characters.generated'
 import '@testing-library/jest-dom'
 
-// Mock the GraphQL API
-vi.mock('../graphql/api', () => ({
-  graphqlApi: {
-    getCharacterDetail: vi.fn().mockResolvedValue({
-      character: {
-        id: '1',
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        gender: 'Male',
-        origin: { name: 'Earth' },
-        location: { name: 'Earth' },
-        image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-        episode: [
-          { id: '1', name: 'Pilot', episode: 'S01E01' },
-          { id: '2', name: 'Lawnmower Dog', episode: 'S01E02' },
-        ],
-      },
-    }),
+// Mock episodes using fragment types
+const mockPilotEpisode: EpisodeInfoFragment & { __typename: 'Episode' } = {
+  __typename: 'Episode',
+  id: '1',
+  name: 'Pilot',
+  episode: 'S01E01',
+}
+
+const mockLawnmowerEpisode: EpisodeInfoFragment & { __typename: 'Episode' } = {
+  __typename: 'Episode',
+  id: '2',
+  name: 'Lawnmower Dog',
+  episode: 'S01E02',
+}
+
+// Mock character using fragment types
+const mockRickCharacter: CharacterInfoFragment & { 
+  __typename: 'Character',
+  origin: { __typename: 'Location', name: string | null } | null,
+  location: { __typename: 'Location', name: string | null } | null 
+} = {
+  __typename: 'Character',
+  id: '1',
+  name: 'Rick Sanchez',
+  status: 'Alive',
+  species: 'Human',
+  gender: 'Male',
+  image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+  origin: { 
+    __typename: 'Location',
+    name: 'Earth' 
   },
-}))
+  location: { 
+    __typename: 'Location',
+    name: 'Earth' 
+  },
+  episode: [mockPilotEpisode, mockLawnmowerEpisode],
+}
+
+const mockCharacterDetailData = {
+  character: mockRickCharacter,
+}
+
+const mocks = [
+  {
+    request: {
+      query: CharacterDetailDocument,
+      variables: { id: '1' },
+    },
+    newData: () => {
+      console.log('Mock called with:', { id: '1' })
+      return { data: mockCharacterDetailData }
+    },
+  },
+]
 
 // Mock router hooks
 vi.mock('@tanstack/react-router', async () => {
@@ -62,7 +98,9 @@ describe('CharacterDetail', () => {
     router.navigate({ to: '/character/1' })
 
     render(
-      <RouterProvider router={router} />
+      <MockedProvider mocks={mocks} >
+        <RouterProvider router={router} />
+      </MockedProvider>
     )
 
     // Wait for the character data to load
