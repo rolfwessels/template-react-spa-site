@@ -29,8 +29,8 @@ src/
 
 ## Key Conventions
 - Use Radix UI components wherever possible, especially @radix-ui/themes
-- Place reusable UI components in `components/ui/`
-- Avoid large frameworks or abstractions
+- Place reusable UI components in `components/`
+- Keep change small and try to reduce complexity
 - Code should be modular, typed (TS), and composable
 - Write tests for every component where possible
 - Use `pnpm` exclusively for package management

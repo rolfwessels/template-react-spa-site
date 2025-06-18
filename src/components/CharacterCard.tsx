@@ -7,7 +7,7 @@ export interface CharacterCardProps {
   character : CharacterBasicFragment
 }
 
-export const CharacterCard = (character: CharacterBasicFragment) => {
+export const CharacterCard = ({ character }: CharacterCardProps) => {
   const { id, name, image, status, species } = character
   const navigate = useNavigate()
   return (

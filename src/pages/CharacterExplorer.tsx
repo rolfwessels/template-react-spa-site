@@ -62,11 +62,7 @@ const CharacterExplorer = () => {
                 char && (
                   <CharacterCard
                     key={char.id!}
-                    id={char.id!}
-                    name={char.name!}
-                    image={char.image!}
-                    status={char.status as 'Alive' | 'Dead' | 'unknown'}
-                    species={char.species!}
+                    character={char}
                   />
                 )
               )}
