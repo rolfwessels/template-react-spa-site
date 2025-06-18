@@ -1,0 +1,45 @@
+---
+description: Contains the structure of the project and conventions to follow.
+globs: 
+alwaysApply: true
+---
+# Project Structure and Conventions
+
+## Base Stack
+- React 18+
+- Vite for development and building
+- Radix UI for accessible UI primitives
+- TanStack Router for routing
+- Vitest for testing
+- graphql-codegen for type-safe GraphQL
+- Zustand for state management (optional)
+
+## Folder Structure
+```
+src/
+  components/     # Radix-wrapped reusable components
+  pages/          # App pages routed via TanStack Router
+  hooks/          # Custom hooks
+  lib/            # Utilities, clients, etc.
+  graphql/        # (Optional) GraphQL fragments/clients
+  styles/
+  App.tsx
+  main.tsx
+```
+
+## Key Conventions
+- Use Radix UI components wherever possible, especially @radix-ui/themes
+- Place reusable UI components in `components/`
+- Keep change small and try to reduce complexity
+- Code should be modular, typed (TS), and composable
+- Write tests for every component where possible
+- Use `pnpm` exclusively for package management
+- Avoid custom styles, use Tailwind instead
+- When working with graphql use the generated calls and interfaces `src/graphql/generated` and `src/graphql/interfaces`. Do not reinvent types everytime.
+
+## Development Workflow
+- Run `make test` after any UI component changes or test modifications
+- Ensure all tests pass before committing changes
+- Write tests alongside component development
+- Follow TDD practices when possible
+

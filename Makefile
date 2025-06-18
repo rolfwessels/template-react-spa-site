@@ -59,6 +59,7 @@ help:
 	@echo "   - start                 : Run the $(project)"
 	@echo "   - test                  : Test the $(project)"
 	@echo "   - publish               : Publish the $(project)"
+	@echo "   - codegen               : Generate the graphql types"
 	@echo ""
 	@echo "   - docker-login          : Login to docker registry"
 	@echo "   - docker-build          : Build the docker image"
@@ -93,23 +94,33 @@ down:
 build: down
 	@echo "Building containers..."
 	@docker compose build
-install: 
+
+install:
 	@echo -e "Installing dependencies for ${GREEN}v${version}${NC}"
 	@npm install -g pnpm
 	@node -v
+	@pnpm install
+	
 
 start: 
 	@echo -e "Starting the $(release) release of $(project)"
 	@pnpm start
 
-test: 
-	@echo -e "Testing ${GREEN}v${version}${NC}"
-	@pnpm test
+codegen:
+	@echo -e "Generating graphql types"
+	@pnpm codegen
+
+test:
+	@echo -e "🔍 Linting"
+	@pnpm lint
+	@echo -e "🔍 Type checking"
+	@pnpm tsc --noEmit
+	@echo -e "🔍 Testing"
+	@pnpm vitest run
 
 publish: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"
 	@pnpm build
-
 
 docker-login: 
 	@echo -e "Login to docker $(registry)"
@@ -120,7 +131,7 @@ docker-login:
 
 docker-build:
 	@echo -e "Building branch ${RED}$(current-branch)${NC} to ${GREEN}$(docker-tags)${NC} with ${GREEN}$(version-full)${NC}"
-	@cd src && docker build -f template-react-spa-site-codex.Cmd/Dockerfile --build-arg VERSION=$(version) --build-arg VERSION_SUFFIX=$(version-suffix) ${docker-tags} .
+	@docker build -f src/Dockerfile --build-arg VERSION=$(version) --build-arg VERSION_SUFFIX=$(version-suffix) ${docker-tags} .
 
 docker-push:
 	@echo -e "Pushing to ${GREEN}$(docker-tags)${NC}"

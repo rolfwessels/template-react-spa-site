@@ -1,23 +1,24 @@
 FROM node:23.11.1-alpine AS base
 WORKDIR /app
-EXPOSE 80
-RUN make install
+RUN apk add --no-cache curl make git
+RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml Makefile ./
+RUN pnpm install --frozen-lockfile
 
 ##
-# Build build project
+# Build project
 ##
 FROM base AS build
-WORKDIR /src
+WORKDIR /app
 COPY . .
-RUN make build
+RUN make publish
 
 ##
 # Copy build to production SPA from ./dist to nginx image
 ##
 FROM nginx:alpine AS production
-COPY --from=build /src/dist /usr/share/nginx/html
-COPY --from=build /src/nginx.conf /etc/nginx/conf.d/default.conf
-ARG  VERSION=1.0.1
+COPY --from=build /app/dist /usr/share/nginx/html
+ARG VERSION=1.0.1
 LABEL version="${VERSION}"
 LABEL description="Template React SPA Site Codex"
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

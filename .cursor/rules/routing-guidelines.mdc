@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Routing and Page Guidelines
+
+## TanStack Router Setup
+- Use TanStack Router for all routing
+- Define routes in a centralized location
+- Use type-safe route definitions
+- Implement proper route guards where needed
+
+## Page Components
+- Keep pages focused on layout and composition
+- Delegate complex logic to custom hooks
+- Use proper loading states
+- Implement error boundaries
+- Handle route parameters safely
+
+## Best Practices
+- Keep pages lightweight
+- Use lazy loading for routes
+- Implement proper meta tags
+- Handle 404 and error states
+- Use proper TypeScript types for route params
