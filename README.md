@@ -82,9 +82,50 @@ make test
 - State management with Zustand (if needed)
 - GitHub Actions CI template available
 
-## ? Things that we are working on
+## ❓ FAQ
 
-- [ ] Better graphql integration (we want proper types)
+### How do I update packages?
+
+To safely update your project dependencies:
+
+```bash
+# 1. Check for outdated packages
+pnpm outdated
+
+# 2. Update packages (choose one approach)
+pnpm update          # Update within semver ranges
+pnpm update --latest # Update to latest versions (be careful!)
+
+# 3. ALWAYS run tests after updating
+make test
+
+# 4. If tests pass, commit the changes
+git add package.json pnpm-lock.yaml
+git commit -m "chore: update dependencies"
+```
+
+**⚠️ Important Notes:**
+- Always run `make test` after updating packages to catch breaking changes
+- Consider updating major versions one at a time for easier debugging
+- Check the changelog of major version bumps before updating
+- Test your app thoroughly in both development and production builds
+
+### How do I add a new package?
+
+```bash
+# Add a runtime dependency
+pnpm add package-name
+
+# Add a dev dependency  
+pnpm add -D package-name
+
+# Don't forget to test!
+make test
+```
+
+## 🔍 Things that we are working on
+
+- [x] Better graphql integration (we want proper types)
 - [ ] We want to use local storage as cache (load from cache > check server > update cache)
 - [ ] I don't like all the .config files in the root. Can we do something better? 
 

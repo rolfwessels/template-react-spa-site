@@ -11,7 +11,10 @@ export default defineConfig([
       "src/graphql/generated/**/*",
       "src/graphql/interfaces/**/*",
       ".tmp/**/*",
-      "src/.tmp/**/*"
+      "src/.tmp/**/*",
+      ".vite/**/*",
+      "dist/**/*",
+      "node_modules/**/*",
     ]
   },
   { 
