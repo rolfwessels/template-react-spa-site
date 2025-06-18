@@ -7,6 +7,12 @@ fragment CharacterBasic on Character {
   species
 }
 
+fragment EpisodeInfo on Episode {
+  id
+  name
+  episode
+}
+
 fragment CharacterInfo on Character {
   id
   name
@@ -20,7 +26,10 @@ fragment CharacterInfo on Character {
   location {
     name
   }
+  episode {...EpisodeInfo}
 }
+
+
 
 query Characters($page: Int, $name: String) {
   characters(page: $page, filter: { name: $name }) {
@@ -39,10 +48,6 @@ query Characters($page: Int, $name: String) {
 query CharacterDetail($id: ID!) {
   character(id: $id) {
     ...CharacterInfo
-    episode {
-      id
-      name
-      episode
-    }
+    
   }
 }

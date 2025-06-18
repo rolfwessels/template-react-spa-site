@@ -1,7 +1,10 @@
 import { useState, ChangeEvent } from 'react'
 import CharacterCard from '../components/CharacterCard'
 import { useQuery } from '@apollo/client'
-import { CharactersDocument } from '../graphql/generated/Characters.generated'
+import { 
+  CharactersDocument, 
+  CharacterBasicFragment 
+} from '../graphql/generated/Characters.generated'
 import { Container, Flex, Grid, Heading, TextField, Text, Button, Box, Card } from '@radix-ui/themes'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import Loading from '../components/Loading'
@@ -15,10 +18,7 @@ const CharacterExplorer = () => {
     variables: { page, name: search || undefined },
   })
 
-  const characters = (data?.characters?.results || []).filter(
-    (char): char is { id: string; name: string; status: string; species: string; image: string } =>
-      !!char && !!char.id && !!char.name && !!char.status && !!char.species && !!char.image
-  )
+  const characters = (data?.characters?.results || []).map(x=>x as CharacterBasicFragment)
   const info = data?.characters?.info
 
   return (

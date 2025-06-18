@@ -1,15 +1,9 @@
 import { Card, Flex, Heading, Text } from '@radix-ui/themes'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-
-interface Character {
-  id: string
-  name: string
-  status: string
-  species: string
-}
+import { CharacterBasicFragment } from '../graphql/generated/Characters.generated'
 
 interface CharacterDashboardProps {
-  characters: Character[]
+  characters: CharacterBasicFragment[]
 }
 
 const COLORS = ['#6366f1', '#22d3ee', '#a3e635', '#fbbf24', '#f472b6', '#818cf8']

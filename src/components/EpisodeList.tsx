@@ -1,13 +1,8 @@
 import { Card, Grid, Heading, Text, Flex } from '@radix-ui/themes'
-
-interface Episode {
-  id: string
-  name: string
-  episode: string
-}
+import { EpisodeInfoFragment } from '../graphql/generated/Characters.generated'
 
 interface EpisodeListProps {
-  episodes: Episode[]
+  episodes: EpisodeInfoFragment[]
 }
 
 export function EpisodeList({ episodes }: EpisodeListProps) {
