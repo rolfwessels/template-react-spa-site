@@ -21,7 +21,7 @@ jobs:
     - name: Install pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version: 10
 
     - name: Install and codegen
       run: |
@@ -46,12 +46,11 @@ jobs:
     - name: Install pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version: 10.12.1
 
-    - name: Install and codegen
+    - name: Install
       run: |
         make install
-        make codegen
 
     - name: Build
       run: make build-release 
