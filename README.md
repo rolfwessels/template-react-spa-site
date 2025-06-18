@@ -44,14 +44,15 @@ make install        # Install dependencies
 make start          # Start dev server
 make build          # Build production version
 make test           # Run tests
+make codegen        # Generate graphql types
+make build-release  # Build release version of the project
 ```
 
 ## 📁 Folder Structure
 
 ```
 src/
-  components/
-    ui/           # Radix-wrapped reusable components
+  components/     # Radix-wrapped reusable components
   pages/          # App pages routed via TanStack Router
   hooks/          # Custom hooks
   lib/            # Utilities, clients, etc.

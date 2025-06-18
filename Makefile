@@ -58,7 +58,9 @@ help:
 	@echo "   - install 			  : Install dependencies"
 	@echo "   - start                 : Run the $(project)"
 	@echo "   - test                  : Test the $(project)"
-	@echo "   - publish               : Publish the $(project)"
+	@echo "   - build-release         : Build release version of the $(project)"
+	@echo "   - zip-build             : Zip the build"
+	@echo "   - version               : Print the current version number"
 	@echo "   - codegen               : Generate the graphql types"
 	@echo ""
 	@echo "   - docker-login          : Login to docker registry"
@@ -118,9 +120,17 @@ test:
 	@echo -e "🔍 Testing"
 	@pnpm vitest run
 
-publish: 
+version:
+	@echo $(version)
+
+build-release: 
 	@echo -e "Building the ${GREEN}v${version}${NC}-$(release) release of $(project)"
 	@pnpm build
+
+zip-build:
+	@echo -e "Zipping the  ${GREEN}v${version}${NC}-$(release)"
+	@zip -r dist/release.v${version}.zip dist
+
 
 docker-login: 
 	@echo -e "Login to docker $(registry)"
