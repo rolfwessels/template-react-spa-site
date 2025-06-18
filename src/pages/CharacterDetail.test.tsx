@@ -77,11 +77,12 @@ describe('CharacterDetail', () => {
     
     expect(screen.getByText('Human')).toBeInTheDocument()
     expect(screen.getByText('Male')).toBeInTheDocument()
-    expect(screen.getByText('Earth')).toBeInTheDocument()
-    expect(screen.getByText('Pilot')).toBeInTheDocument()
-    expect(screen.getByText('S01E01')).toBeInTheDocument()
-    expect(screen.getByText('Lawnmower Dog')).toBeInTheDocument()
-    expect(screen.getByText('S01E02')).toBeInTheDocument()
+    
+    // Check that both Origin and Location show Earth
+    const earthElements = screen.getAllByText('Earth')
+    expect(earthElements).toHaveLength(2)
+    expect(screen.getByText('S01E01: Pilot')).toBeInTheDocument()
+    expect(screen.getByText('S01E02: Lawnmower Dog')).toBeInTheDocument()
     
     // Back button
     const backButton = screen.getByRole('button', { name: /back to character list/i })
