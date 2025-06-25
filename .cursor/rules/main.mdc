@@ -5,6 +5,15 @@ alwaysApply: true
 ---
 # Project Structure and Conventions
 
+## Simplicity First Principle
+**ALWAYS start with the simplest solution that works.**
+- For CI/CD: Start with basic test + build, add complexity only when needed
+- For features: Build minimal working version first, then iterate
+- For configurations: Use minimal settings, avoid premature optimization
+- For dependencies: Prefer fewer, well-established packages
+- When in doubt, choose the simpler approach over the "complete" solution
+- Remember: You can always add complexity later, but removing it is much harder
+
 ## Base Stack
 - React 18+
 - Vite for development and building
@@ -37,15 +46,6 @@ src/
 - Use `pnpm` exclusively for package management
 - Avoid custom styles, use Tailwind instead
 - When working with graphql use the generated calls and interfaces `src/graphql/generated` and `src/graphql/interfaces`. Do not reinvent types everytime.
-
-## Simplicity First Principle
-**ALWAYS start with the simplest solution that works.**
-- For CI/CD: Start with basic test + build, add complexity only when needed
-- For features: Build minimal working version first, then iterate
-- For configurations: Use minimal settings, avoid premature optimization
-- For dependencies: Prefer fewer, well-established packages
-- When in doubt, choose the simpler approach over the "complete" solution
-- Remember: You can always add complexity later, but removing it is much harder
 
 ## Development Workflow
 - Run `make test` after any UI component changes or test modifications
