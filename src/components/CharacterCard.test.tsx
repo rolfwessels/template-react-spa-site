@@ -120,16 +120,20 @@ describe('CharacterCard', () => {
   it('renders with correct accessibility attributes', () => {
     renderWithTheme(<CharacterCard character={mockRick} />)
     
-    // Card should have cursor pointer class
+    // Card should have cursor pointer style and character-card class for hover effects
     const cardElement = document.querySelector('.rt-Card')
-    expect(cardElement).toHaveClass('cursor-pointer')
+    expect(cardElement).toBeInTheDocument()
+    expect(cardElement).toHaveClass('character-card')
+    expect(cardElement).toHaveStyle({ cursor: 'pointer' })
   })
 
   it('applies hover effects correctly', () => {
     renderWithTheme(<CharacterCard character={mockRick} />)
     
-    const cardElement = screen.getByText('Rick Sanchez').closest('div')
-    expect(cardElement).toHaveClass('hover:shadow-xl', 'hover:scale-105')
+    // Card should have character-card class which applies hover effects via CSS
+    const cardElement = document.querySelector('.character-card')
+    expect(cardElement).toBeInTheDocument()
+    expect(cardElement).toHaveClass('character-card')
   })
 
   it('handles edge cases with empty/null values', () => {

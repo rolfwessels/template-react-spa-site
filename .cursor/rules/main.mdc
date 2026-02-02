@@ -20,7 +20,6 @@ alwaysApply: true
 - Radix UI for accessible UI primitives
 - TanStack Router for routing
 - Vitest for testing
-- graphql-codegen for type-safe GraphQL
 - Zustand for state management (optional)
 
 ## Folder Structure
@@ -42,14 +41,146 @@ src/
 - Place reusable UI components in `components/`
 - Keep change small and try to reduce complexity
 - Code should be modular, typed (TS), and composable
-- Write tests for every component where possible
 - Use `pnpm` exclusively for package management
-- Avoid custom styles, use Tailwind instead
 - When working with graphql use the generated calls and interfaces `src/graphql/generated` and `src/graphql/interfaces`. Do not reinvent types everytime.
 
+## Code Comments
+**Only add comments that explain WHY, not WHAT.**
+
+Good code should be self-documenting through clear naming and structure. Comments should add value by explaining:
+- **WHY** a decision was made (business logic, performance trade-offs, workarounds)
+- **Complex algorithms** that aren't immediately obvious from the code
+- **External constraints** (API limitations, browser quirks, dependencies)
+
+❌ **BAD Comments (add no value):**
+```tsx
+// Save the authentication token
+export function saveAuthToken(token: string): void {
+  localStorage.setItem(TOKEN_STORAGE_KEY, token);
+}
+```
+
+✅ **GOOD Comments (explain context):**
+```tsx
+// Token must be stored in localStorage (not sessionStorage) to persist across tabs
+// per the OAuth2 spec requirement for single sign-on
+export function saveAuthToken(token: string): void {
+  localStorage.setItem(TOKEN_STORAGE_KEY, token);
+}
+```
+
+**Remember:**
+- Function names should describe what they do
+- Variable names should describe what they contain
+- Comments should explain why the code exists or why it's written a certain way
+- Avoid comments that just reference code locations or restate what the code does
+- Stale comments are worse than no comments
+
+## Styling Rules
+**🚫 NO TAILWIND - Use Radix UI Only**
+
+- **New components**: MUST use only Radix UI components and props for styling
+- **Refactoring**: ALWAYS remove Tailwind classes and replace with Radix UI equivalents
+- **No custom CSS classes**: Use Radix UI's built-in styling props instead
+
+### Radix UI Styling Patterns
+Instead of Tailwind, use Radix UI's component props:
+
+**Layout:**
+```tsx
+// ❌ BAD: <div className="flex gap-3 mt-6">
+// ✅ GOOD: <Flex gap="3" mt="6">
+
+// ❌ BAD: <div className="space-y-3">
+// ✅ GOOD: <Box className="space-y-3"> // Only if no Radix alternative
+```
+
+**Spacing:**
+```tsx
+// ❌ BAD: className="mb-4 p-3"
+// ✅ GOOD: mb="4" p="3"
+```
+
+**Typography:**
+```tsx
+// ❌ BAD: <p className="text-slate-600 text-sm">
+// ✅ GOOD: <Text size="2" color="gray">
+```
+
+**When Radix UI Doesn't Have an Option:**
+- Only then use `className` with minimal styling
+- Document why Radix UI props weren't sufficient
+
+## DRY Principles (Don't Repeat Yourself)
+**If you write the same code twice, it's time to refactor.**
+
+### Shared Utilities
+- **Move common functions to `src/lib/`**: If a function is used in multiple places, extract it to a utility file
+- **Examples**: `titleToCamelCase`, validation functions, formatters, parsers
+- **Location**: `src/lib/schema-types.ts`, `src/lib/utils.ts`, etc.
+
+### Component Composition
+- **Use compound components over monolithic components**: Break down large components into composable pieces
+- **Example**: `StepForm.Container`, `StepForm.Header`, `StepForm.Actions` instead of one giant wrapper with 50+ props
+- **Benefits**: More maintainable, flexible, self-documenting code
+
+### Avoid Duplicated Dialogs/Forms
+- **One pattern for similar actions**: If you have multiple "Add" dialogs, they should use the same pattern
+- **Extract common logic**: Use shared hooks or utility functions
+- **Example**: Root property and nested property dialogs should behave identically
+
+### Shared Types
+- **Import types from their source**: Don't redefine types that already exist in `src/lib/templates-api.ts` or `src/generated/api.d.ts`
+- **Use type aliases**: Create type aliases for complex types to maintain consistency
+- **Example**: `export type SchemaProperty = ApiSchemaProperty` instead of redefining the entire type
+
+### When to Apply DRY
+✅ **DO extract when:**
+- Same code appears 2+ times
+- Logic is complex and worth centralizing
+- Multiple components need the same functionality
+- Types are defined in multiple places
+
+❌ **DON'T extract when:**
+- It makes code harder to understand
+- The "duplication" is actually different business logic
+- It creates unnecessary coupling between unrelated features
+- Over-abstraction makes the code more complex
+
+### Red Flags
+🚩 **Watch out for:**
+- Components with 10+ props (time to use compound components)
+- Copy-pasted functions across files (move to `src/lib/`)
+- Similar dialogs with different implementations (unify the pattern)
+- Repeated type definitions (import from source)
+- Inline utility functions used in multiple places (extract to shared location)
+
+## Naming Conventions
+Follow the [React Style Guide naming conventions](https://reactstyleguide.com/rules/naming-consistent/):
+
+- **PascalCase** for exported React components: `UserMenu`, `ProfileCard`
+- **camelCase** for hooks, variables, and functions: `useFetch`, `isLoading`
+- **kebab-case** (lowercase + dashes) for filenames: `user-menu.tsx`, `use-fetch.ts`
+
+**Key Takeaways:**
+- Stick to the pattern everywhere—IDE autocompletion and grep become effortless
+- Inconsistent casing causes missed imports and brittle refactors
+- Route files (`src/routes/`) use kebab-case to match URL patterns
+- Component files (`src/pages/`, `src/components/`) use kebab-case filenames but export PascalCase components
+- Utility files (`src/lib/`) use kebab-case filenames with camelCase exports
+
 ## Development Workflow
-- Run `make test` after any UI component changes or test modifications
+
+### ⚠️ CRITICAL: ALWAYS RUN TESTS ⚠️
+**🔴 MANDATORY: Run `make test` after EVERY change to ensure nothing breaks! 🔴**
+
+- **BEFORE completing any task**: Run `make test` to verify changes
+- **AFTER creating any component**: Run `make test` to catch issues early
+- **AFTER editing any file**: Run `make test` to ensure all tests pass
+- **BEFORE marking a todo complete**: Run `make test` to validate the work
 - Ensure all tests pass before committing changes
 - Write tests alongside component development
 - Follow TDD practices when possible
+
+**Remember: If you forget to run `make test`, you're not done yet!**
 

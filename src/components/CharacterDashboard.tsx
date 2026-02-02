@@ -1,4 +1,4 @@
-import { Card, Flex, Heading, Text } from '@radix-ui/themes'
+import { Card, Flex, Heading, Text, Box } from '@radix-ui/themes'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { CharacterBasicFragment } from '../graphql/generated/Characters.generated'
 
@@ -32,53 +32,65 @@ export const CharacterDashboard = ({ characters }: CharacterDashboardProps) => {
   const statusData = Object.entries(statusCounts).map(([name, value]) => ({ name, value }))
 
   return (
-    <div className="mb-8 w-full">
-      <Flex gap="4" className="mb-8 w-full" justify="start">
-        <Card className="rounded-xl shadow p-4 min-w-[160px] bg-white">
-          <Heading size="3">Total</Heading>
-          <Text size="6" weight="bold">{total}</Text>
-          <Text color="gray" size="2">Characters</Text>
+    <Box mb="8" width="100%">
+      <Flex gap="4" mb="8" width="100%" justify="start">
+        <Card size="2" variant="surface" style={{ minWidth: '160px' }}>
+          <Box p="4">
+            <Heading size="3">Total</Heading>
+            <Text size="6" weight="bold">{total}</Text>
+            <Text color="gray" size="2">Characters</Text>
+          </Box>
         </Card>
-        <Card className="rounded-xl shadow p-4 min-w-[160px] bg-white">
-          <Heading size="3">Humans</Heading>
-          <Text size="6" weight="bold">{humans}</Text>
+        <Card size="2" variant="surface" style={{ minWidth: '160px' }}>
+          <Box p="4">
+            <Heading size="3">Humans</Heading>
+            <Text size="6" weight="bold">{humans}</Text>
+          </Box>
         </Card>
-        <Card className="rounded-xl shadow p-4 min-w-[160px] bg-white">
-          <Heading size="3">Aliens</Heading>
-          <Text size="6" weight="bold">{aliens}</Text>
+        <Card size="2" variant="surface" style={{ minWidth: '160px' }}>
+          <Box p="4">
+            <Heading size="3">Aliens</Heading>
+            <Text size="6" weight="bold">{aliens}</Text>
+          </Box>
         </Card>
-        <Card className="rounded-xl shadow p-4 min-w-[160px] bg-white">
-          <Heading size="3">Other</Heading>
-          <Text size="6" weight="bold">{others}</Text>
-        </Card>
-      </Flex>
-      <Flex gap="8" wrap="wrap" className="w-full">
-        <Card className="rounded-xl shadow p-6 flex-1 min-w-[320px] bg-white">
-          <Heading size="4" className="mb-4">Species Distribution</Heading>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie data={speciesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                {speciesData.map((_, idx) => (
-                  <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Card>
-        <Card className="rounded-xl shadow p-6 flex-1 min-w-[320px] bg-white">
-          <Heading size="4" className="mb-4">Status Distribution</Heading>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={statusData} margin={{ left: 8, right: 8 }}>
-              <XAxis dataKey="name" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="value" fill="#6366f1" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        <Card size="2" variant="surface" style={{ minWidth: '160px' }}>
+          <Box p="4">
+            <Heading size="3">Other</Heading>
+            <Text size="6" weight="bold">{others}</Text>
+          </Box>
         </Card>
       </Flex>
-    </div>
+      <Flex gap="8" wrap="wrap" width="100%">
+        <Card size="2" variant="surface" style={{ flex: 1, minWidth: '320px' }}>
+          <Box p="6">
+            <Heading size="4" mb="4">Species Distribution</Heading>
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie data={speciesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                  {speciesData.map((_, idx) => (
+                    <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Box>
+        </Card>
+        <Card size="2" variant="surface" style={{ flex: 1, minWidth: '320px' }}>
+          <Box p="6">
+            <Heading size="4" mb="4">Status Distribution</Heading>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={statusData} margin={{ left: 8, right: 8 }}>
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#6366f1" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </Box>
+        </Card>
+      </Flex>
+    </Box>
   )
 }
 
