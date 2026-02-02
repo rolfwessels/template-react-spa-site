@@ -2,7 +2,7 @@
 
 # General Variables
 date=$(shell date +'%y.%m.%d.%H.%M')
-project := Template-react-spa-site-codex
+project := Template-react-spa-site
 container := dev
 docker-file-check := /.dockerenv
 docker-warning := ""
@@ -13,7 +13,7 @@ versionPrefix := 0.1
 version := $(versionPrefix).$(shell git rev-list HEAD --count)
 git-short-hash := $(shell git rev-parse --short=8 HEAD)
 version-suffix := ''
-dockerhub := dockerhub.com/template-react-spa-site-codex
+dockerhub := dockerhub.com/template-react-spa-site
 
 release := release
 ifeq ($(env), dev)

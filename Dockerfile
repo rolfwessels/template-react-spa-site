@@ -17,7 +17,7 @@ RUN apk update \
   docker-cli \
   docker-cli-compose \
   openssh \
-  && git config --global --add safe.directory /template-react-spa-site-codex
+  && git config --global --add safe.directory /template-react-spa-site
 
 
 # zsh
@@ -27,10 +27,10 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master
   echo "done"
 
 # Working Folder
-WORKDIR /template-react-spa-site-codex
+WORKDIR /template-react-spa-site
 
 
 
-WORKDIR /template-react-spa-site-codex
+WORKDIR /template-react-spa-site
 ENV TERM xterm-256color
 RUN printf 'export PS1="\[\e[0;34;0;33m\][DCKR]\[\e[0m\] \\t \[\e[40;38;5;28m\][\w]\[\e[0m\] \$ "' >> ~/.bashrc

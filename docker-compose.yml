@@ -1,14 +1,14 @@
 services:
   dev:
-    container_name: template-react-spa-site-codex-dev
+    container_name: template-react-spa-site-dev
     build:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ".:/template-react-spa-site-codex"
+      - ".:/template-react-spa-site"
       - "./.aws:/root/.aws"
       - "./zshrc:/root/.zshrc"
-      - template-react-spa-site-codex-cache:/cache
+      - template-react-spa-site-cache:/cache
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - HISTFILE=/cache/.bash_history
@@ -17,4 +17,4 @@ services:
       driver: none
 
 volumes:
-  template-react-spa-site-codex-cache:
+  template-react-spa-site-cache:

@@ -20,5 +20,5 @@ FROM nginx:alpine AS production
 COPY --from=build /app/dist /usr/share/nginx/html
 ARG VERSION=1.0.1
 LABEL version="${VERSION}"
-LABEL description="Template React SPA Site Codex"
+LABEL description="Template React SPA Site"
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
