@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from 'react'
 import CharacterCard from '../components/CharacterCard'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { 
   CharactersDocument, 
   CharacterBasicFragment 
@@ -18,7 +18,7 @@ const CharacterExplorer = () => {
     variables: { page, name: search || undefined },
   })
 
-  const characters = (data?.characters?.results || []).map(x=>x as CharacterBasicFragment)
+  const characters = (data?.characters?.results || []).map((x: unknown) => x as CharacterBasicFragment)
   const info = data?.characters?.info
 
   return (
@@ -60,7 +60,7 @@ const CharacterExplorer = () => {
             <CharacterDashboard characters={characters} />
             
             <Grid width="100%" columns={{ xs: '1', sm: '2', md: '3', lg: '4' }} gap="6" py="4">
-              {characters.map((char) =>
+              {characters.map((char: CharacterBasicFragment) =>
                 char && (
                   <CharacterCard
                     key={char.id!}

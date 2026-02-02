@@ -1,6 +1,6 @@
 
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { 
   CharacterDetailDocument,
   CharacterInfoFragment,
