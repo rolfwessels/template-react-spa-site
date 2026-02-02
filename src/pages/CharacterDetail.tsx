@@ -1,6 +1,6 @@
 
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { 
   CharacterDetailDocument,
   CharacterInfoFragment,
@@ -24,12 +24,13 @@ export default function CharacterDetail() {
 
   
   return (
-    <Container p="6" className="bg-gray-50 min-h-screen">
+    <Container p="6" style={{ minHeight: '100vh', backgroundColor: 'var(--gray-2)' }}>
       <Flex direction="column" gap="4">
         <Button
           variant="solid"
           color="indigo"
-          className="w-fit rounded-lg shadow mb-2"
+          size="2"
+          mb="2"
           onClick={() => navigate({ to: '/' })}
           aria-label="Back to character list"
         >

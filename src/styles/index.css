@@ -1,9 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Custom CSS can be added here if needed */
 
-@layer base {
-  body {
-    @apply bg-gray-50 text-gray-900;
-  }
-} 
+/* Hover effects for CharacterCard - Radix UI doesn't support transform/scale transitions */
+.character-card {
+  transition: transform 200ms, box-shadow 200ms;
+}
+
+.character-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}

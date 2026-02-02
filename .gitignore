@@ -3,3 +3,5 @@ dist
 .env
 src/.tmp/
 .vite/
+PR_REVIEW.md
+.pnpm-store/

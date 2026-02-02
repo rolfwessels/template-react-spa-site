@@ -24,18 +24,19 @@ export default defineConfig([
   },
   { files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+  {
+    ...pluginReact.configs.flat.recommended,
+    settings: {
+      react: {
+        version: "detect"
+      }
+    }
+  },
   {
     files: ["src/**/*.{js,jsx,ts,tsx}"],
     rules: {
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-explicit-any": "off"
-    },
-    settings: {
-      react: {
-        version: "18.2.0",
-        defaultVersion: "18.2.0"
-      }
     }
   }
 ]);

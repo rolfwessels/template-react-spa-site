@@ -1,14 +1,13 @@
 # template-react-spa-site
 
-A lightweight, modern React Single Page Application (SPA) template using Vite, TailwindCSS, and Radix UI. Built for speed, accessibility, and rapid development — with optional GraphQL integration via urql.
+A lightweight, modern React Single Page Application (SPA) template using Vite and Radix UI. Built for speed, accessibility, and rapid development — with optional GraphQL integration via Apollo Client.
 
 ## 🚀 Features
 
 - ⚛️ React + Vite (super-fast dev experience)
-- 🎨 TailwindCSS for utility-first styling
-- 🎛️ Radix UI primitives for accessible components
-- 📊 ui-shadcn for graphs and other UI components (https://ui.shadcn.com/)
-- 🔌 Optional GraphQL support with apollo and graphql-codegen
+- 🎛️ Radix UI for accessible, themeable components
+- 📊 Recharts for data visualization
+- 🔌 Optional GraphQL support with Apollo Client and graphql-codegen
 - 🧪 Vitest + Testing Library for testing
 - 🛠️ Makefile automation for local/dev tasks
 - 🐳 Docker + DevContainer ready
@@ -61,6 +60,17 @@ src/
   App.tsx
   main.tsx
 ```
+
+## 🤖 For AI Coding Assistants
+
+**Important:** Before making any changes to this codebase, please read the project conventions and guidelines in `.cursor/rules/main.mdc`. This file contains:
+- Styling rules (NO TAILWIND - Radix UI only)
+- Code organization patterns
+- Naming conventions
+- DRY principles
+- Testing requirements
+
+Following these rules ensures consistency and maintainability across the project.
 
 ## 🧪 Testing
 

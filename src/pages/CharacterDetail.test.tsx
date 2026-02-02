@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import CharacterDetail from './CharacterDetail'
 import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
-import { MockedProvider } from '@apollo/client/testing'
+import { MockedProvider } from '@apollo/client/testing/react'
 import { CharacterDetailDocument, CharacterInfoFragment, EpisodeInfoFragment } from '../graphql/generated/Characters.generated'
 import '@testing-library/jest-dom'
 
@@ -55,10 +55,7 @@ const mocks = [
       query: CharacterDetailDocument,
       variables: { id: '1' },
     },
-    newData: () => {
-      console.log('Mock called with:', { id: '1' })
-      return { data: mockCharacterDetailData }
-    },
+    result: { data: mockCharacterDetailData },
   },
 ]
 
@@ -98,7 +95,7 @@ describe('CharacterDetail', () => {
     router.navigate({ to: '/character/1' })
 
     render(
-      <MockedProvider mocks={mocks} >
+      <MockedProvider mocks={mocks}>
         <RouterProvider router={router} />
       </MockedProvider>
     )

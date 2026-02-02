@@ -2,7 +2,7 @@
 
 # General Variables
 date=$(shell date +'%y.%m.%d.%H.%M')
-project := Template-react-spa-site-codex
+project := Template-react-spa-site
 container := dev
 docker-file-check := /.dockerenv
 docker-warning := ""
@@ -13,7 +13,7 @@ versionPrefix := 0.1
 version := $(versionPrefix).$(shell git rev-list HEAD --count)
 git-short-hash := $(shell git rev-parse --short=8 HEAD)
 version-suffix := ''
-dockerhub := dockerhub.com/template-react-spa-site-codex
+dockerhub := dockerhub.com/template-react-spa-site
 
 release := release
 ifeq ($(env), dev)
@@ -71,6 +71,7 @@ help:
 	@echo "   - docker-publish        : Publish the docker image"
 	@echo "   - deploy                : Deploy the $(project)"
 	@echo "   - update-packages       : Update the packages"
+	@echo "   - pr-review             : Generate PR review report"
 
 	
 	@echo ""
@@ -193,3 +194,31 @@ endef
 define assert-file-exists
   $(call assert,$(wildcard $1),$1 does not exist. $2)
 endef
+
+pr-review:
+	@echo -e "Generating PR review report..."
+	@echo "# PR Review Report" > PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo "**Generated:** $$(date '+%Y-%m-%d %H:%M:%S')" >> PR_REVIEW.md
+	@echo "**Current Branch:** $(current-branch)" >> PR_REVIEW.md
+	@echo "**Base Branch:** main" >> PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo "## File Statistics" >> PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo '```' >> PR_REVIEW.md
+	@git diff main...HEAD --stat >> PR_REVIEW.md
+	@echo '```' >> PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo "## Commit History" >> PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo '```' >> PR_REVIEW.md
+	@git log main..HEAD --oneline >> PR_REVIEW.md
+	@echo '```' >> PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo "## Full Diff" >> PR_REVIEW.md
+	@echo "" >> PR_REVIEW.md
+	@echo '```diff' >> PR_REVIEW.md
+	@git diff main...HEAD >> PR_REVIEW.md
+	@echo '```' >> PR_REVIEW.md
+	@echo -e "${GREEN}✓${NC} PR review report generated: PR_REVIEW.md"
+

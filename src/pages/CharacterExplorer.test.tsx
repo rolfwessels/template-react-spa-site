@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
-import { MockedProvider } from '@apollo/client/testing'
+import { MockedProvider } from '@apollo/client/testing/react'
 import CharacterExplorer from './CharacterExplorer'
 import { CharactersDocument, CharacterBasicFragment } from '../graphql/generated/Characters.generated'
 

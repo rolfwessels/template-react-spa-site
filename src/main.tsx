@@ -4,7 +4,7 @@ import { RouterProvider, router } from './router'
 import './styles/index.css'
 import { Theme } from '@radix-ui/themes'
 import '@radix-ui/themes/styles.css'
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
 import { apolloClient } from './lib/apolloClient'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
