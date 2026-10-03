@@ -1,4 +1,4 @@
-FROM node:23.11.1-alpine
+FROM node:24.21.0-alpine
 
 # Base Development Packages
 RUN apk update \
