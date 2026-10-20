@@ -131,6 +131,9 @@ git commit -m "chore: update dependencies"
 `pnpm audit` still reports [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
 for `braces`, pulled in by the development-only GraphQL codegen CLI. No patched
 release is available; avoid untrusted glob patterns in codegen configuration.
+CI explicitly excludes only this CVE (`CVE-2026-93687`) from the all-dependencies
+audit until a patched release is available. A separate production audit has no
+exceptions, and all other advisories still fail CI.
 
 ### How do I add a new package?
 

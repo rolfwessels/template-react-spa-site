@@ -1,7 +1,7 @@
 FROM node:24.21.0-alpine AS base
 WORKDIR /app
 RUN apk add --no-cache curl make git
-RUN npm install -g pnpm@10.12.1
+RUN npm install -g pnpm@10.34.7
 COPY package.json pnpm-lock.yaml Makefile ./
 RUN pnpm install --frozen-lockfile
 

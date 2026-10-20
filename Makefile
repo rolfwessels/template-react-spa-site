@@ -100,7 +100,7 @@ build: down
 
 install:
 	@echo -e "Installing dependencies for ${GREEN}v${version}${NC}"
-	@npm install -g pnpm
+	@npm install -g pnpm@10.34.7
 	@node -v
 	@pnpm install
 	
