@@ -33,7 +33,6 @@ const config: CodegenConfig = {
       documents: './**/*.graphql',
       preset: 'near-operation-file',
       presetConfig: {
-        baseTypesPath: './../interfaces/api.interface.ts',
         extension: '.generated.ts',
         folder: '../generated',
       },

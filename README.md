@@ -17,13 +17,13 @@ A lightweight, modern React Single Page Application (SPA) template using Vite an
 
 ### Prerequisites
 
-- Node.js ≥ 22.x
-- pnpm
+- Node.js 24.x (matches the development container)
+- pnpm 10.x
 - Docker (optional for devcontainers)
 
 ```bash
-nvm install v22.16.0
-npm install -g pnpm
+nvm install 24
+npm install -g pnpm@10
 node -v
 ```
 
@@ -119,6 +119,18 @@ git commit -m "chore: update dependencies"
 - Consider updating major versions one at a time for easier debugging
 - Check the changelog of major version bumps before updating
 - Test your app thoroughly in both development and production builds
+
+### Dependency compatibility
+
+- TypeScript stays on 6.x until typescript-eslint supports TypeScript 7.
+- ESLint stays on 9.x until eslint-plugin-react supports ESLint 10.
+- GraphQL stays on 16.x until the near-operation-file and React Apollo codegen plugins support GraphQL 17.
+- Node.js types track the container's Node.js 24 runtime.
+- The GraphQL Tools override keeps codegen on a patched version of its utilities.
+
+`pnpm audit` still reports [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
+for `braces`, pulled in by the development-only GraphQL codegen CLI. No patched
+release is available; avoid untrusted glob patterns in codegen configuration.
 
 ### How do I add a new package?
 

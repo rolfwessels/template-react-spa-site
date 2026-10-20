@@ -4,7 +4,7 @@ import CharacterDetail from './CharacterDetail'
 import { RouterProvider, createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
 import { MockedProvider } from '@apollo/client/testing/react'
 import { CharacterDetailDocument, CharacterInfoFragment, EpisodeInfoFragment } from '../graphql/generated/Characters.generated'
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 // Mock episodes using fragment types
 const mockPilotEpisode: EpisodeInfoFragment & { __typename: 'Episode' } = {
