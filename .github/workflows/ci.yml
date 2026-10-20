@@ -16,12 +16,12 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '24'
 
     - name: Install pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 10
+        version: 10.34.7
 
     - name: Install and codegen
       run: |
@@ -30,6 +30,14 @@ jobs:
     - name: Test
       run: |
         make test
+    - name: Audit production dependencies for known vulnerabilities
+      run: pnpm audit --prod --audit-level low
+    - name: Audit all dependencies for known vulnerabilities
+      # Unpatched dev-only codegen dependency; see README Dependency compatibility.
+      # The production audit above must not ignore this advisory.
+      run: |
+        pnpm audit --ignore CVE-2026-93687
+        pnpm audit --audit-level low
   build:
     runs-on: ubuntu-latest
     needs: test
@@ -41,12 +49,12 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '24'
 
     - name: Install pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 10.12.1
+        version: 10.34.7
 
     - name: Install
       run: |

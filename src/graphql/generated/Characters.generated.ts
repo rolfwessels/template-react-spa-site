@@ -1,5 +1,7 @@
-import * as Types from '../interfaces/api.interface';
-
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CharacterBasicFragment = { id: string | null, name: string | null, image: string | null, status: string | null, species: string | null };
 
@@ -7,16 +9,16 @@ export type EpisodeInfoFragment = { id: string | null, name: string | null, epis
 
 export type CharacterInfoFragment = { id: string | null, name: string | null, image: string | null, status: string | null, species: string | null, gender: string | null, origin: { name: string | null } | null, location: { name: string | null } | null, episode: Array<{ id: string | null, name: string | null, episode: string | null } | null> };
 
-export type CharactersQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  name?: Types.InputMaybe<Types.Scalars['String']['input']>;
+export type CharactersQueryVariables = Exact<{
+  page?: number | null | undefined;
+  name?: string | null | undefined;
 }>;
 
 
 export type CharactersQuery = { characters: { info: { count: number | null, pages: number | null, next: number | null, prev: number | null } | null, results: Array<{ id: string | null, name: string | null, image: string | null, status: string | null, species: string | null } | null> | null } | null };
 
-export type CharacterDetailQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type CharacterDetailQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 

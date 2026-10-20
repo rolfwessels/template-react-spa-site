@@ -7,11 +7,11 @@ export default defineConfig({
     
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '../src'),
-      '@components': path.resolve(__dirname, '../src/components'),
-      '@pages': path.resolve(__dirname, '../src/pages'),
-      '@hooks': path.resolve(__dirname, '../src/hooks'),
-      '@lib': path.resolve(__dirname, '../src/lib'),
+      '@': path.resolve(import.meta.dirname, '../src'),
+      '@components': path.resolve(import.meta.dirname, '../src/components'),
+      '@pages': path.resolve(import.meta.dirname, '../src/pages'),
+      '@hooks': path.resolve(import.meta.dirname, '../src/hooks'),
+      '@lib': path.resolve(import.meta.dirname, '../src/lib'),
     },
   }
 }) 
