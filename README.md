@@ -33,7 +33,7 @@ node -v
 git clone https://github.com/rolfwessels/template-react-spa-site.git my-app
 cd my-app
 make install
-make dev
+make start
 ```
 
 ## 🧰 Make Commands
@@ -63,14 +63,7 @@ src/
 
 ## 🤖 For AI Coding Assistants
 
-**Important:** Before making any changes to this codebase, please read the project conventions and guidelines in `.cursor/rules/main.mdc`. This file contains:
-- Styling rules (NO TAILWIND - Radix UI only)
-- Code organization patterns
-- Naming conventions
-- DRY principles
-- Testing requirements
-
-Following these rules ensures consistency and maintainability across the project.
+See [AGENTS.md](AGENTS.md) for project conventions and verification.
 
 ## 🧪 Testing
 
