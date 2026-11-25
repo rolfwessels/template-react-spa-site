@@ -30,6 +30,8 @@ make start
 
 Open the local URL printed by Vite. The **Rick and Morty Characters** page loads the character list from the public GraphQL API. Select a character card to open its detail page.
 
+For Docker development, run `make build up` to open the dev shell. The dev shell shows a 🐳 prompt and saves Zsh history in a project volume across `make down` and rebuilds.
+
 ## 📋 Make commands
 
 | Command | Purpose |
@@ -54,7 +56,7 @@ See [AGENTS.md](AGENTS.md) for project conventions and verification.
 ## 📦 Deployment
 
 - Use `make build-release` to produce `dist/`. Configure your static host to fall back to `index.html` for client-side routes.
-- Use `make docker-build` to build the Nginx runtime image from `src/Dockerfile`.
+- The root `Dockerfile` contains both stages. `make build` builds the `dev` stage and `make docker-build` builds the Nginx `runtime` stage.
 
 ## 🔗 Optional Integrations
 

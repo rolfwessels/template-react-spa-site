@@ -3,8 +3,8 @@ services:
   web:
     build:
       context: ../
-      dockerfile: src/Dockerfile
-      target: production
+      dockerfile: Dockerfile
+      target: runtime
     ports:
       - "8080:80"
     environment:

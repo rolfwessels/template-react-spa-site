@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      target: dev
     volumes:
       - ".:/template-react-spa-site"
       - "./.aws:/root/.aws"
@@ -11,7 +12,7 @@ services:
       - template-react-spa-site-cache:/cache
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - HISTFILE=/cache/.bash_history
+      - HISTFILE=/cache/.zsh_history
     entrypoint: top -b
     logging:
       driver: none
