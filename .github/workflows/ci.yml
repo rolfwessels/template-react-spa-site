@@ -30,14 +30,8 @@ jobs:
     - name: Test
       run: |
         make test
-    - name: Audit production dependencies for known vulnerabilities
-      run: pnpm audit --prod --audit-level low
-    - name: Audit all dependencies for known vulnerabilities
-      # Unpatched dev-only codegen dependency; see README Dependency compatibility.
-      # The production audit above must not ignore this advisory.
-      run: |
-        pnpm audit --ignore CVE-2026-93687
-        pnpm audit --audit-level low
+    - name: Audit dependencies for known vulnerabilities
+      run: make scan
   build:
     runs-on: ubuntu-latest
     needs: test

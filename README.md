@@ -1,8 +1,8 @@
-# template-react-spa-site
+# 🌐 template-react-spa-site
 
-A lightweight, modern React Single Page Application (SPA) template using Vite and Radix UI. Built for speed, accessibility, and rapid development — with optional GraphQL integration via Apollo Client.
+A React and Vite single-page app starter. The demo uses Radix UI and Apollo Client to browse Rick and Morty characters and open their detail pages.
 
-## 🚀 Features
+## ✨ Features
 
 - ⚛️ React + Vite (super-fast dev experience)
 - 🎛️ Radix UI for accessible, themeable components
@@ -13,79 +13,52 @@ A lightweight, modern React Single Page Application (SPA) template using Vite an
 - 🐳 Docker + DevContainer ready
 - 📦 Clean, minimal scaffold
 
-## 🏁 Getting Started
+## 🛠 Prerequisites
 
-### Prerequisites
+- Git, `make`, and Node.js 24 with npm. `make install` installs the pinned pnpm version and the project dependencies.
+- Internet access to load character data from the public GraphQL API.
+- Docker with Compose for the optional development container.
 
-- Node.js 24.x (matches the development container)
-- pnpm 10.x
-- Docker (optional for devcontainers)
+## 🚀 Quick start
 
-```bash
-nvm install 24
-npm install -g pnpm@10
-node -v
-```
+From the repository root, install dependencies and start Vite.
 
-### Clone and Setup
-
-```bash
-git clone https://github.com/rolfwessels/template-react-spa-site.git my-app
-cd my-app
+```sh
 make install
-make dev
+make start
 ```
 
-## 🧰 Make Commands
+Open the local URL printed by Vite. The **Rick and Morty Characters** page loads the character list from the public GraphQL API. Select a character card to open its detail page.
 
-```bash
-make install        # Install dependencies
-make start          # Start dev server
-make build          # Build production version
-make test           # Run tests
-make codegen        # Generate graphql types
-make build-release  # Build release version of the project
-```
+For Docker development, run `make build up` to open the dev shell. The dev shell shows a 🐳 prompt and saves Zsh history in a project volume across `make down` and rebuilds.
 
-## 📁 Folder Structure
+## 📋 Make commands
 
-```
-src/
-  components/     # Radix-wrapped reusable components
-  pages/          # App pages routed via TanStack Router
-  hooks/          # Custom hooks
-  lib/            # Utilities, clients, etc.
-  graphql/        # (Optional) GraphQL fragments/clients
-  styles/
-  App.tsx
-  main.tsx
-```
+| Command | Purpose |
+| --- | --- |
+| `make install` | Install pnpm and the project dependencies. |
+| `make start` | Start the Vite development server. |
+| `make test` | Run ESLint, TypeScript checks, and Vitest. |
+| `make scan` | Audit production and development dependencies. |
+| `make verify` | Run tests and the dependency audit. |
+| `make codegen` | Generate GraphQL types and documents. |
+| `make build` | Rebuild the Docker development image. |
+| `make build-release` | Build the production site into `dist/`. |
 
-## 🤖 For AI Coding Assistants
+Run `make help` for more targets.
 
-**Important:** Before making any changes to this codebase, please read the project conventions and guidelines in `.cursor/rules/main.mdc`. This file contains:
-- Styling rules (NO TAILWIND - Radix UI only)
-- Code organization patterns
-- Naming conventions
-- DRY principles
-- Testing requirements
+## 📁 Folder structure
 
-Following these rules ensures consistency and maintainability across the project.
+- `src/components/` holds reusable UI, and `src/pages/` holds routed pages and their tests.
+- `src/graphql/` holds GraphQL operations and generated types. `src/lib/` holds shared utilities and the Apollo client.
+- `src/router.tsx` defines the routes.
 
-## 🧪 Testing
-
-- **Vitest** for unit tests
-- **Testing Library** for UI tests
-
-```bash
-make test
-```
+See [AGENTS.md](AGENTS.md) for project conventions and verification.
 
 ## 📦 Deployment
 
-- `src\Dockerfile` for containerized builds
-- `make docker-build` for local prod builds
-- Can be deployed to Vercel, Netlify, or any static host with SPA support
+- Use `make build-release` to produce `dist/`. Configure your static host to fall back to `index.html` for client-side routes.
+- The root `Dockerfile` contains both stages. `make build` builds the `dev` stage and `make docker-build` builds the Nginx `runtime` stage.
 
 ## 🔗 Optional Integrations
 
@@ -94,7 +67,7 @@ make test
 
 ## ❓ FAQ
 
-### How do I update packages?
+### 🔄 How do I update packages?
 
 To safely update your project dependencies:
 
@@ -120,7 +93,7 @@ git commit -m "chore: update dependencies"
 - Check the changelog of major version bumps before updating
 - Test your app thoroughly in both development and production builds
 
-### Dependency compatibility
+### 🧩 Dependency compatibility
 
 - TypeScript stays on 6.x until typescript-eslint supports TypeScript 7.
 - ESLint stays on 9.x until eslint-plugin-react supports ESLint 10.
@@ -128,14 +101,7 @@ git commit -m "chore: update dependencies"
 - Node.js types track the container's Node.js 24 runtime.
 - The GraphQL Tools override keeps codegen on a patched version of its utilities.
 
-`pnpm audit` still reports [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
-for `braces`, pulled in by the development-only GraphQL codegen CLI. No patched
-release is available; avoid untrusted glob patterns in codegen configuration.
-CI explicitly excludes only this CVE (`CVE-2026-93687`) from the all-dependencies
-audit until a patched release is available. A separate production audit has no
-exceptions, and all other advisories still fail CI.
-
-### How do I add a new package?
+### ➕ How do I add a new package?
 
 ```bash
 # Add a runtime dependency
@@ -156,4 +122,4 @@ make test
 
 ## 📜 License
 
-MIT — use it however you like!
+[MIT](LICENSE).
