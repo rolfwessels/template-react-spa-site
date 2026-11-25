@@ -45,6 +45,8 @@ ifeq ("$(wildcard $(docker-file-check))","")
 endif
 
 # Targets
+.PHONY: scan verify
+
 help:
 	@echo "The following commands can be used for building & running & deploying the the $(project) container"
 	@echo "---------------------------------------------------------------------------------------------"
@@ -58,6 +60,8 @@ help:
 	@echo "   - install 			  : Install dependencies"
 	@echo "   - start                 : Run the $(project)"
 	@echo "   - test                  : Test the $(project)"
+	@echo "   - scan                  : Audit dependencies for known vulnerabilities"
+	@echo "   - verify                : Run tests and the dependency audit"
 	@echo "   - build-release         : Build release version of the $(project)"
 	@echo "   - zip-build             : Zip the build"
 	@echo "   - version               : Print the current version number"
@@ -120,6 +124,12 @@ test:
 	@pnpm tsc --noEmit
 	@echo -e "🔍 Testing"
 	@pnpm vitest run --config config/vitest.config.ts
+
+scan:
+	@pnpm audit --audit-level low
+
+verify: test
+	@$(MAKE) scan
 
 version:
 	@echo $(version)

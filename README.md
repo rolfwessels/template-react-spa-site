@@ -39,6 +39,8 @@ For Docker development, run `make build up` to open the dev shell. The dev shell
 | `make install` | Install pnpm and the project dependencies. |
 | `make start` | Start the Vite development server. |
 | `make test` | Run ESLint, TypeScript checks, and Vitest. |
+| `make scan` | Audit production and development dependencies. |
+| `make verify` | Run tests and the dependency audit. |
 | `make codegen` | Generate GraphQL types and documents. |
 | `make build` | Rebuild the Docker development image. |
 | `make build-release` | Build the production site into `dist/`. |
@@ -98,13 +100,6 @@ git commit -m "chore: update dependencies"
 - GraphQL stays on 16.x until the near-operation-file and React Apollo codegen plugins support GraphQL 17.
 - Node.js types track the container's Node.js 24 runtime.
 - The GraphQL Tools override keeps codegen on a patched version of its utilities.
-
-`pnpm audit` still reports [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
-for `braces`, pulled in by the development-only GraphQL codegen CLI. No patched
-release is available; avoid untrusted glob patterns in codegen configuration.
-CI explicitly excludes only this CVE (`CVE-2026-93687`) from the all-dependencies
-audit until a patched release is available. A separate production audit has no
-exceptions, and all other advisories still fail CI.
 
 ### ➕ How do I add a new package?
 
