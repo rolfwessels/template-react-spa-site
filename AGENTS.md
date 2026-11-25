@@ -1,26 +1,25 @@
-# Agent Instructions
+# Project Overview
+Read [README.md](README.md) for project-specific details, setup, and commands.
 
-Read [README.md](README.md) for project setup and commands.
+# What we value
+- **Simplicity first:** build the smallest thing that works; add abstraction or complexity only when a real case demands it.
+- **Clarity over cleverness:** prefer plain, readable code—clear names, small focused functions, and obvious control flow.
+- **Small, reversible steps:** keep changes focused and incremental so they are easy to review, test, and roll back.
+- **Evidence over assumptions:** prove changes work in practice rather than assuming passing unit tests are enough.
 
-## What we value
+# Conventions & Boundaries
+- Use hexagonal architecture (ports and adapters) to isolate core business logic from external tools, frameworks, and delivery mechanisms so the application can evolve without costly rewrites.
+- Keep changes scoped to the task; avoid refactoring unrelated files or renaming shared types unless requested.
+- Ask before adding new external dependencies or modifying database migrations.
+- Put multi-step workflows and domain-specific playbooks in skills or subdirectory `AGENTS.md` files instead of bloating this root file.
+- Use lightweight Git Flow: branch from `main` as `feature/<name>`, `bug/<name>`, or `hotfix/<name>`, and tag releases on `main` (no long-running release branches).
+- Write clear PR descriptions with these headers: **What**, **Why**, **Decisions**, **Testing**, and **Risks**.
 
-- Build the simplest solution that works. Prefer clear names, small functions, and straightforward control flow.
-- Keep changes focused and reversible. Add abstractions when the code has a concrete need for them.
-
-## Conventions and boundaries
-
-- Ask before adding external dependencies or changing database migrations.
-- Put detailed workflows in skills or nested `AGENTS.md` files.
-- Branch from `main` using `feature/<name>` for features and `bug/<name>` for fixes. Open pull requests against `main`.
-- Use **What**, **Why**, **Decisions**, **Testing**, and **Risks** as pull request headings.
-- Use pnpm for package management and Radix Themes for new UI. Follow the existing separation between routed pages and reusable components.
-- Keep GraphQL operations under `src/graphql/queries/`. Run `make codegen` after schema or operation changes and use the generated types.
-
-## Verification and handoff
-
-- For a behavior change, start with a failing test, make it pass with the smallest change, and then refactor.
-- Run `make verify` for code changes. It includes `make test` and the dependency audit (`make scan`).
-- Run `make start` and exercise the affected flow in the browser for UI changes.
-- Exercise the real entry point after meaningful behavior changes and before opening or updating the pull request. Check the output and relevant side effects.
-- Mock external systems at their boundaries. Confirm what test or dry-run modes skip, preserve the coverage of failing checks, and report any verification gaps.
-- Before opening a pull request, get an independent review of correctness and security when a fresh reviewer is available.
+# Verification & Handoff
+- **TDD:** start with a failing test, write the minimal code to pass, then refactor cleanly once the work is green.
+- **End-to-end verification:** verify beyond unit tests—launch and exercise the running app (including clicking through flows as needed) to confirm real behavior:
+  - Run after completing a meaningful chunk of work and always before opening or updating a PR—not on every turn.
+  - Drive the real user path (not internal shortcuts) and verify both visible behavior and side effects (screenshots, files, DB, logs, messages).
+  - Mock only external systems behind a real production boundary, and verify what any dry-run or test mode actually skips rather than trusting its name.
+  - Never weaken a failing check to make it pass; report gaps honestly and explicitly call out anything left unverified.
+- **Pre-PR review:** before opening a PR, run an independent review using a clean-context subagent on a strong model (ideally different from the one that wrote the code). Every review must include security considerations.
